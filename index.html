@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>信義364 都更權變｜我的選屋意向表（簡易版）</title>
+<style>
+  :root{
+    --navy:#1b3a6b; --navy2:#2a5298; --gold:#c8a24a;
+    --green:#1f8a4c; --orange:#d97706;
+    --line:#e3e6ea; --ink:#1f2733; --sub:#5b6573; --soft:#f8f9fb;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Microsoft JhengHei","微軟正黑體","PingFang TC",sans-serif;
+       color:var(--ink);background:#f5f6f8;line-height:1.6;-webkit-text-size-adjust:100%}
+  header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:22px 16px 18px}
+  header .kicker{font-size:13px;letter-spacing:2px;color:#cdd8ee;margin-bottom:4px}
+  header h1{margin:0;font-size:21px;font-weight:800}
+  header .sub{font-size:13px;color:#d7e0f2;margin-top:6px}
+  .wrap{max-width:680px;margin:0 auto;padding:16px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;margin:14px 0;
+        box-shadow:0 1px 3px rgba(20,40,80,.05)}
+  .step{display:inline-flex;align-items:center;gap:8px;font-weight:800;color:var(--navy);font-size:16px;margin-bottom:12px}
+  .step .n{background:var(--navy);color:#fff;width:26px;height:26px;border-radius:50%;
+           display:inline-flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+  label.fld{display:block;font-size:13px;color:var(--sub);margin:10px 0 6px;font-weight:700}
+  input[type=text],input[type=number],select{font-family:inherit;width:100%;font-size:16px;padding:11px 12px;
+        border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+  input[type=number]{font-weight:800;color:var(--navy)}
+  select{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1l5 5 5-5' stroke='%235b6573' stroke-width='2' fill='none'/></svg>");
+        background-repeat:no-repeat;background-position:right 14px center;padding-right:34px}
+  input:focus,select:focus{outline:none;border-color:var(--navy2)}
+  .hint{font-size:12.5px;color:var(--sub);margin-top:8px}
+  .hint b{color:var(--orange)}
+  .capbox{margin-top:12px;background:#eef2f9;border-radius:10px;padding:10px 14px;font-weight:700;color:var(--navy);font-size:14px}
+  .capbox b{font-size:18px}
+  /* 志願區塊 */
+  .wish{border:1.5px solid var(--line);border-radius:12px;padding:14px;margin:12px 0;background:var(--soft)}
+  .wish .rk{display:inline-flex;align-items:center;gap:8px;font-weight:800;color:var(--navy);margin-bottom:4px}
+  .wish .rk .b{background:var(--gold);color:#fff;width:24px;height:24px;border-radius:50%;
+               display:inline-flex;align-items:center;justify-content:center;font-size:13px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media(max-width:520px){.row2{grid-template-columns:1fr}}
+  .calc{margin-top:10px;font-size:13.5px;font-weight:700;min-height:20px}
+  .calc .pos{color:var(--orange)} .calc .neg{color:var(--green)} .calc .mut{color:var(--sub);font-weight:400}
+  .addbtn{background:#fff;border:1.5px dashed var(--navy2);color:var(--navy);font-weight:800;font-size:14px;
+          padding:11px;width:100%;border-radius:10px;cursor:pointer}
+  .submit{background:var(--gold);color:#fff;border:none;font-size:17px;font-weight:800;padding:15px;
+          width:100%;border-radius:12px;margin-top:14px;cursor:pointer}
+  .submit:disabled{background:#cbb98a;cursor:not-allowed}
+  .note{font-size:12.5px;color:var(--sub);margin-top:12px;background:var(--soft);border-radius:10px;padding:11px 13px}
+  .note b{color:var(--navy)}
+  .del{background:none;border:none;color:var(--sub);font-size:12.5px;cursor:pointer;text-decoration:underline}
+  .combohead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+  .grp{margin:10px 0 6px;font-size:12.5px;color:var(--sub);font-weight:700}
+  .subrow{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+  .subrow select,.subrow input{flex:1;min-width:0}
+  .xbtn{background:none;border:none;color:var(--orange);font-size:20px;cursor:pointer;padding:0 4px;flex-shrink:0;line-height:1}
+  .miniadd{background:#fff;border:1.5px dashed var(--navy2);color:var(--navy);font-weight:700;font-size:13px;
+           padding:8px 12px;border-radius:8px;cursor:pointer}
+  .calc{background:#eef2f9;border-radius:10px;padding:10px 12px}
+  footer{text-align:center;color:var(--sub);font-size:12px;padding:22px 16px 40px}
+  /* 各戶對照表 */
+  details#areaRef summary{cursor:pointer;font-weight:800;color:var(--navy);padding:10px 12px;
+    background:#eef2f9;border-radius:10px;font-size:14px;list-style:none;user-select:none}
+  details#areaRef summary::-webkit-details-marker{display:none}
+  details#areaRef[open] summary{border-radius:10px 10px 0 0}
+  .areafilter{padding:8px 0}
+  .areawrap{max-height:58vh;overflow:auto;border:1px solid var(--line);border-radius:0 0 10px 10px}
+  .areatbl{width:100%;border-collapse:collapse;font-size:12px}
+  .areatbl th{background:var(--navy);color:#fff;padding:7px 4px;position:sticky;top:0;z-index:2;font-weight:700;white-space:nowrap}
+  .areatbl td{border-bottom:1px solid #eef1f5;padding:6px 4px;text-align:center;white-space:nowrap}
+  .areatbl tr:nth-child(even) td{background:#f7f9fc}
+  .areatbl .flrow td{background:var(--navy);background:#dde6f4;color:var(--navy);font-weight:800;text-align:left;padding:5px 8px;position:sticky;top:30px}
+  .areatbl .uid{font-weight:800;color:var(--navy);text-align:left;padding-left:8px}
+  .areatbl .rm{color:var(--orange);font-weight:700}
+  .areatbl .val{font-weight:800;color:var(--green)}
+  .areatbl .hide{display:none}
+  /* 選屋熱度 */
+  details#heatBox summary{cursor:pointer;font-weight:800;color:var(--navy);padding:10px 12px;background:#eef2f9;border-radius:10px;font-size:14px;list-style:none;user-select:none;margin-top:4px}
+  details#heatBox summary::-webkit-details-marker{display:none}
+  #heatBanner .bn{background:#fff7e6;border:1px solid #f0c36d;color:#8a5a00;border-radius:10px;padding:9px 11px;font-size:12.5px;margin:6px 0}
+  .heatstat{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:10px 0 4px}
+  .heatstat .s{background:#eef1f8;border:1px solid #d4dbee;border-radius:8px;padding:7px;text-align:center}
+  .heatstat .n{font-size:18px;font-weight:800;color:var(--navy)} .heatstat .l{font-size:11px;color:#666}
+  .heatlegend{display:flex;gap:10px;flex-wrap:wrap;font-size:12px;color:#555;margin:6px 0 8px;align-items:center}
+  .heatlegend span{display:inline-flex;align-items:center;gap:4px}
+  .hsw{width:14px;height:14px;border-radius:4px;display:inline-block;border:1px solid rgba(0,0,0,.08)}
+  .hsw.z{background:#eef0f3}.hsw.c{background:#cfe8d6}.hsw.m{background:#ffd98a}.hsw.h{background:#f4977f}
+  .hotline{font-size:12.5px;margin:4px 0}.hotline b{color:#b03a00}
+  .heatgridwrap{overflow-x:auto;margin:6px 0}
+  table.hgrid{border-collapse:separate;border-spacing:3px;margin:0 auto}
+  table.hgrid th{font-size:11px;color:#5b6573;font-weight:700;padding:1px 3px}
+  table.hgrid td.hfl{font-size:10.5px;color:#5b6573;font-weight:700;text-align:right;padding-right:3px;white-space:nowrap}
+  .hcell{width:46px;height:34px;border-radius:6px;border:1px solid rgba(0,0,0,.06);display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .hcell .hid{font-size:9.5px;font-weight:800;color:#1f2733;line-height:1}
+  .hcell .hct{font-size:10px;font-weight:800;margin-top:1px;color:#333}
+  .hcell.z{background:#eef0f3}.hcell.c{background:#cfe8d6}.hcell.m{background:#ffd98a}.hcell.h{background:#f4977f}
+  .hcell.empty{background:transparent;border:none}
+  .prog{height:11px;background:#eef0f3;border-radius:99px;overflow:hidden;margin:8px 0}
+  .prog>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#2E8B57,#3cb371)}
+  .undone{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+  .undone .chip{background:#fdecec;border:1px solid #f3b9b9;color:#b3261e;border-radius:999px;padding:3px 9px;font-size:12px;font-weight:700}
+  @media(max-width:520px){.hcell{width:38px;height:32px}.hcell .hid{font-size:8.5px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="kicker">寶舖建設集團 ｜ 都市更新權利變換</div>
+  <h1>信義364　我的選屋意向表</h1>
+  <div class="sub">填好應分配價值，用下拉選單選出你想要的戶別與車位即可</div>
+</header>
+
+<div class="wrap">
+
+  <!-- 基本資料 -->
+  <div class="card">
+    <div class="step"><span class="n">1</span>你的基本資料</div>
+    <label class="fld">你的門牌（從下拉選單找你家）</label>
+    <select id="who"></select>
+    <label class="fld">聯絡電話</label>
+    <input type="text" id="tel" placeholder="方便回覆用">
+    <div class="hint">找不到你的門牌？請於諮詢場次告知，我們協助補上。</div>
+    <label class="fld">本戶應分配價值 — 照〈附件4〉填<b>完整數字（元）</b>，例：97068579</label>
+    <div id="valRows"></div>
+    <button class="miniadd" type="button" id="addVal">＋ 加一位共有人（同門牌多人各填一列）</button>
+    <div class="hint">※ 系統會核對是否為本戶資料（防止填到別戶）；多位共有人各填一列，整戶<b>自動加總</b>當選屋權值。資料只在本機試算，不會自動上傳。</div>
+    <div class="capbox">本戶應分配價值合計＝ <b id="valSum">—</b> 萬　｜　可選上限(110%)＝ <b id="cap">—</b> 萬</div>
+  </div>
+
+  <!-- 選屋熱度（即時・匿名） -->
+  <div class="card">
+    <div class="step"><span class="n">♨</span>目前選屋熱度（匿名・即時）
+      <button class="miniadd" type="button" id="heatRefresh" style="margin-left:auto">🔄 更新</button></div>
+    <div class="hint">看看哪幾戶多人想選（塞車），選的時候可避開、提高抽中機會。不顯示是誰。</div>
+    <div id="heatBanner"></div>
+    <details id="heatBox">
+      <summary>📊 點此展開／收合　各戶熱度圖 ＋ 填寫進度</summary>
+      <div class="heatstat" id="heatStat"></div>
+      <div class="heatlegend">
+        <span><span class="hsw h"></span>熱 3+人</span><span><span class="hsw m"></span>中 2人</span>
+        <span><span class="hsw c"></span>冷 1人</span><span><span class="hsw z"></span>無人</span>
+        <span style="margin-left:auto;color:#999">數字＝想選人數</span>
+      </div>
+      <div class="hotline" id="heatHot"></div>
+      <div class="heatgridwrap"><div id="heatGrid"></div></div>
+      <div class="prog"><i id="heatProgbar"></i></div>
+      <div class="hint" id="heatProgtext" style="margin-top:0"></div>
+      <div style="font-weight:800;color:#b3261e;margin:8px 0 2px;font-size:13px">尚未填寫的門牌：</div>
+      <div class="undone" id="heatUndone"></div>
+      <div class="hint" style="margin-top:10px">💡 <b>請一個門牌推派一位代表填寫，一戶填一次就好</b>，全家先討論好再一起填，避免重複。</div>
+    </details>
+  </div>
+
+  <!-- 志願組合 -->
+  <div class="card">
+    <div class="step"><span class="n">2</span>選出你的志願組合（每組可多戶＋多車位）</div>
+    <div id="combos"></div>
+    <button class="addbtn" id="addBtn" type="button">＋ 再加一個志願組合</button>
+    <div class="note">
+      <b>怎麼填：</b>第 1 志願組合＝你最想要的整套。很多人會選 <b>2 戶</b>，就在同一組裡按「＋加一戶」把要的戶別都加進去，車位也是。
+      系統會把<b>整組合計</b>跟你的應分配價值比，自動算出這一組<b>要補或退多少現金</b>。第 2 志願組合＝備案。
+    </div>
+  </div>
+
+  <!-- 各戶更新後面積與價值對照表 -->
+  <div class="card">
+    <div class="step"><span class="n">★</span>各戶更新後面積與價值（參考）</div>
+    <div class="hint">不確定哪一戶？點開查看<b>每一戶</b>的房型、坪數明細與更新後房屋價值，再回上面選。</div>
+    <details id="areaRef">
+      <summary>📋 點此展開／收合　各戶面積與價值對照表</summary>
+      <div class="areafilter">
+        <input type="text" id="areaSearch" placeholder="🔍 輸入戶別找（例：12F-A3）或房型（例：三房）">
+      </div>
+      <div class="areawrap"><div id="areaTable"></div></div>
+      <div class="hint" style="margin-top:8px">※「權狀坪」含公設(約35%)；室內＋陽台為私有面積。價值為中泰估價之更新後房屋權利價值。</div>
+    </details>
+  </div>
+
+  <!-- 送出 -->
+  <div class="card">
+    <button class="submit" id="submitBtn" disabled>送出我的意向（只有建設公司看得到）</button>
+    <div class="note">
+      <b>隱私：</b>你送出的內容<b>只有寶舖建設開發部看得到</b>，住戶之間不會互相看到誰選了什麼。
+      不會操作網路的住戶，歡迎於諮詢場次到公司由專人協助填寫。
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  寶舖建設集團　開發部　｜　信義364 都更權變　選屋意向表（簡易版）<br>
+  本表僅供住戶表達意向參考，最終分配以核定之權利變換計畫為準。
+</footer>
+
+<script>
+/* =========================================================
+   ★★★ 資料區 1：戶別清單 ★★★（待換成正式戶別表）
+   id=戶別代號  floor=樓層  type=房型  in/bal/ter=室內/陽台/露台坪  unit=單價(萬/坪)
+   權狀總坪=in+bal+ter（自動）；選屋總價=總坪×單價（自動）
+   ========================================================= */
+// 共 170 戶（中泰估價・權利價值含露台+綠陽，單位：萬）
+// 共 170 戶（中泰估價・權利價值含露台+綠陽，單位：萬）
+const UNITS = [
+  {id:"1F-A1", floor:1, type:"店鋪", in:51.18, bal:0, ter:0, price:10236},
+  {id:"1F-A2", floor:1, type:"店鋪", in:54.63, bal:0, ter:0, price:10926},
+  {id:"1F-A3", floor:1, type:"店鋪", in:57.44, bal:0, ter:0, price:9822},
+  {id:"1F-A4", floor:1, type:"店鋪", in:44.51, bal:0, ter:0, price:7745},
+  {id:"2F-A1", floor:2, type:"住宅", in:26.99, bal:0, ter:2.31, price:4106},
+  {id:"2F-A2", floor:2, type:"住宅", in:38.26, bal:0, ter:18.56, price:6421},
+  {id:"2F-A3", floor:2, type:"住宅", in:39.67, bal:0, ter:21.32, price:6795},
+  {id:"2F-A4", floor:2, type:"住宅", in:30.41, bal:0, ter:2.41, price:4542},
+  {id:"2F-A5", floor:2, type:"住宅", in:21.78, bal:0, ter:1.56, price:3370},
+  {id:"2F-A6", floor:2, type:"住宅", in:20.95, bal:0, ter:1.63, price:3248},
+  {id:"2F-A7", floor:2, type:"住宅", in:37.69, bal:0, ter:10.28, price:6043},
+  {id:"2F-A8", floor:2, type:"住宅", in:35.41, bal:0, ter:9.96, price:5595},
+  {id:"3F-A1", floor:3, type:"住宅", in:25.49, bal:0, ter:0, price:3750},
+  {id:"3F-A2", floor:3, type:"住宅", in:38.66, bal:0, ter:0, price:5718},
+  {id:"3F-A3", floor:3, type:"住宅", in:36.25, bal:1.21, ter:0.65, price:5482},
+  {id:"3F-A4", floor:3, type:"住宅", in:28.16, bal:0, ter:0.17, price:4196},
+  {id:"3F-A5", floor:3, type:"住宅", in:20.03, bal:0, ter:0.52, price:3037},
+  {id:"3F-A6", floor:3, type:"住宅", in:19.21, bal:0, ter:0.5, price:2912},
+  {id:"3F-A7", floor:3, type:"住宅", in:34.4, bal:0, ter:1.54, price:5136},
+  {id:"3F-A8", floor:3, type:"住宅", in:35.44, bal:0, ter:0, price:5128},
+  {id:"4F-A1", floor:4, type:"住宅", in:25.07, bal:0, ter:0, price:3668},
+  {id:"4F-A2", floor:4, type:"住宅", in:34.36, bal:1.33, ter:1.02, price:5137},
+  {id:"4F-A3", floor:4, type:"住宅", in:31.52, bal:1.51, ter:1.08, price:4778},
+  {id:"4F-A4", floor:4, type:"住宅", in:28.01, bal:0, ter:0, price:4143},
+  {id:"4F-A5", floor:4, type:"住宅", in:20.03, bal:0.78, ter:0, price:3014},
+  {id:"4F-A6", floor:4, type:"住宅", in:19.21, bal:0, ter:0, price:2872},
+  {id:"4F-A7", floor:4, type:"住宅", in:34.4, bal:1.42, ter:0, price:5067},
+  {id:"4F-A8", floor:4, type:"住宅", in:34.55, bal:0.84, ter:0, price:5020},
+  {id:"5F-A1", floor:5, type:"住宅", in:24.96, bal:0.73, ter:0, price:3730},
+  {id:"5F-A2", floor:5, type:"住宅", in:31.53, bal:1.43, ter:0, price:4749},
+  {id:"5F-A3", floor:5, type:"住宅", in:34.12, bal:0, ter:0, price:5207},
+  {id:"5F-A4", floor:5, type:"住宅", in:28.01, bal:0.83, ter:0, price:4231},
+  {id:"5F-A5", floor:5, type:"住宅", in:20.03, bal:0, ter:0, price:3041},
+  {id:"5F-A6", floor:5, type:"住宅", in:19.21, bal:0.74, ter:0, price:2935},
+  {id:"5F-A7", floor:5, type:"住宅", in:34.4, bal:0, ter:0, price:5143},
+  {id:"5F-A8", floor:5, type:"住宅", in:33.08, bal:0, ter:0, price:4919},
+  {id:"6F-A1", floor:6, type:"住宅", in:24.96, bal:0, ter:0, price:3751},
+  {id:"6F-A2", floor:6, type:"住宅", in:30.09, bal:0.85, ter:0, price:4589},
+  {id:"6F-A3", floor:6, type:"住宅", in:34.17, bal:0.89, ter:0, price:5292},
+  {id:"6F-A4", floor:6, type:"住宅", in:28.01, bal:0, ter:0, price:4252},
+  {id:"6F-A5", floor:6, type:"住宅", in:20.03, bal:0.78, ter:0, price:3093},
+  {id:"6F-A6", floor:6, type:"住宅", in:19.21, bal:0, ter:0, price:2947},
+  {id:"6F-A7", floor:6, type:"住宅", in:34.4, bal:1.42, ter:0, price:5234},
+  {id:"6F-A8", floor:6, type:"住宅", in:34.55, bal:0.84, ter:0, price:5186},
+  {id:"7F-A1", floor:7, type:"住宅", in:25.49, bal:0.91, ter:0, price:3892},
+  {id:"7F-A2", floor:7, type:"住宅", in:34.36, bal:0, ter:0, price:5298},
+  {id:"7F-A3", floor:7, type:"住宅", in:34.05, bal:0, ter:0, price:5305},
+  {id:"7F-A4", floor:7, type:"住宅", in:28.01, bal:0.83, ter:0, price:4318},
+  {id:"7F-A5", floor:7, type:"住宅", in:20.03, bal:0, ter:0, price:3105},
+  {id:"7F-A6", floor:7, type:"住宅", in:19.21, bal:0.74, ter:0, price:2997},
+  {id:"7F-A7", floor:7, type:"住宅", in:34.4, bal:0, ter:0, price:5249},
+  {id:"7F-A8", floor:7, type:"住宅", in:34.55, bal:0, ter:0, price:5221},
+  {id:"8F-A1", floor:8, type:"住宅", in:24.96, bal:0, ter:0, price:3829},
+  {id:"8F-A2", floor:8, type:"住宅", in:34.36, bal:0.91, ter:0, price:5377},
+  {id:"8F-A3", floor:8, type:"住宅", in:31.51, bal:1.31, ter:0, price:4994},
+  {id:"8F-A4", floor:8, type:"住宅", in:28.01, bal:0, ter:0, price:4342},
+  {id:"8F-A5", floor:8, type:"住宅", in:20.03, bal:0.78, ter:0, price:3157},
+  {id:"8F-A6", floor:8, type:"住宅", in:19.21, bal:0, ter:0, price:3008},
+  {id:"8F-A7", floor:8, type:"住宅", in:34.4, bal:1.42, ter:0, price:5341},
+  {id:"8F-A8", floor:8, type:"住宅", in:34.52, bal:0.84, ter:0, price:5289},
+  {id:"9F-A1", floor:9, type:"住宅", in:24.96, bal:0.73, ter:0, price:3888},
+  {id:"9F-A2", floor:9, type:"住宅", in:34.36, bal:0, ter:0, price:5408},
+  {id:"9F-A3", floor:9, type:"住宅", in:31.41, bal:0, ter:0, price:4994},
+  {id:"9F-A4", floor:9, type:"住宅", in:28.01, bal:0.83, ter:0, price:4408},
+  {id:"9F-A5", floor:9, type:"住宅", in:20.03, bal:0, ter:0, price:3169},
+  {id:"9F-A6", floor:9, type:"住宅", in:19.21, bal:0.74, ter:0, price:3059},
+  {id:"9F-A7", floor:9, type:"住宅", in:34.4, bal:0, ter:0, price:5360},
+  {id:"9F-A8", floor:9, type:"住宅", in:34.68, bal:0, ter:0, price:5348},
+  {id:"10F-A1", floor:10, type:"住宅", in:24.96, bal:0, ter:0, price:3909},
+  {id:"10F-A2", floor:10, type:"住宅", in:31.64, bal:2.35, ter:0, price:5042},
+  {id:"10F-A3", floor:10, type:"住宅", in:34.05, bal:0.89, ter:0, price:5492},
+  {id:"10F-A4", floor:10, type:"住宅", in:28.01, bal:0, ter:0, price:4431},
+  {id:"10F-A5", floor:10, type:"住宅", in:20.03, bal:0.78, ter:0, price:3222},
+  {id:"10F-A6", floor:10, type:"住宅", in:19.21, bal:0, ter:0, price:3070},
+  {id:"10F-A7", floor:10, type:"住宅", in:34.4, bal:1.42, ter:0, price:5452},
+  {id:"10F-A8", floor:10, type:"住宅", in:33.08, bal:0.84, ter:0, price:5202},
+  {id:"11F-A1", floor:11, type:"住宅", in:24.96, bal:0.73, ter:0, price:3968},
+  {id:"11F-A2", floor:11, type:"住宅", in:30.21, bal:0, ter:0, price:4828},
+  {id:"11F-A3", floor:11, type:"住宅", in:34.05, bal:0, ter:0, price:5523},
+  {id:"11F-A4", floor:11, type:"住宅", in:28.01, bal:0.83, ter:0, price:4498},
+  {id:"11F-A5", floor:11, type:"住宅", in:20.03, bal:0, ter:0, price:3233},
+  {id:"11F-A6", floor:11, type:"住宅", in:19.21, bal:0.74, ter:0, price:3120},
+  {id:"11F-A7", floor:11, type:"住宅", in:34.4, bal:0, ter:0, price:5470},
+  {id:"11F-A8", floor:11, type:"住宅", in:34.55, bal:0, ter:0, price:5438},
+  {id:"12F-A1", floor:12, type:"住宅", in:25.49, bal:0, ter:0, price:4073},
+  {id:"12F-A2", floor:12, type:"住宅", in:34.36, bal:0.91, ter:0, price:5598},
+  {id:"12F-A3", floor:12, type:"住宅", in:34.05, bal:0.89, ter:0, price:5602},
+  {id:"12F-A4", floor:12, type:"住宅", in:28.01, bal:0, ter:0, price:4543},
+  {id:"12F-A5", floor:12, type:"住宅", in:20.03, bal:0.78, ter:0, price:3302},
+  {id:"12F-A6", floor:12, type:"住宅", in:19.21, bal:0, ter:0, price:3147},
+  {id:"12F-A7", floor:12, type:"住宅", in:34.4, bal:1.42, ter:0, price:5563},
+  {id:"12F-A8", floor:12, type:"住宅", in:34.55, bal:0.84, ter:0, price:5516},
+  {id:"13F-A1", floor:13, type:"住宅", in:25.49, bal:0.91, ter:0, price:4139},
+  {id:"13F-A2", floor:13, type:"住宅", in:34.36, bal:0, ter:0, price:5628},
+  {id:"13F-A3", floor:13, type:"住宅", in:34.05, bal:0, ter:0, price:5632},
+  {id:"13F-A4", floor:13, type:"住宅", in:28.01, bal:0.83, ter:0, price:4611},
+  {id:"13F-A5", floor:13, type:"住宅", in:20.03, bal:0, ter:0, price:3313},
+  {id:"13F-A6", floor:13, type:"住宅", in:19.21, bal:0.74, ter:0, price:3198},
+  {id:"13F-A7", floor:13, type:"住宅", in:34.4, bal:0, ter:0, price:5580},
+  {id:"13F-A8", floor:13, type:"住宅", in:34.55, bal:0, ter:0, price:5549},
+  {id:"14F-A1", floor:14, type:"住宅", in:25.49, bal:0, ter:0, price:4155},
+  {id:"14F-A2", floor:14, type:"住宅", in:34.36, bal:0.91, ter:0, price:5763},
+  {id:"14F-A3", floor:14, type:"住宅", in:34.05, bal:0.89, ter:0, price:5762},
+  {id:"14F-A4", floor:14, type:"住宅", in:28.01, bal:0, ter:0, price:4742},
+  {id:"14F-A5", floor:14, type:"住宅", in:20.03, bal:0.78, ter:0, price:3445},
+  {id:"14F-A6", floor:14, type:"住宅", in:19.21, bal:0, ter:0, price:3283},
+  {id:"14F-A7", floor:14, type:"住宅", in:34.4, bal:1.42, ter:0, price:5757},
+  {id:"14F-A8", floor:14, type:"住宅", in:34.55, bal:0.84, ter:0, price:5710},
+  {id:"15F-A1", floor:15, type:"住宅", in:25.49, bal:0.91, ter:0, price:4208},
+  {id:"15F-A2", floor:15, type:"住宅", in:34.36, bal:0, ter:0, price:5776},
+  {id:"15F-A3", floor:15, type:"住宅", in:34.05, bal:0, ter:0, price:5778},
+  {id:"15F-A4", floor:15, type:"住宅", in:28.01, bal:0.83, ter:0, price:4796},
+  {id:"15F-A5", floor:15, type:"住宅", in:20.03, bal:0, ter:0, price:3445},
+  {id:"15F-A6", floor:15, type:"住宅", in:19.21, bal:0.74, ter:0, price:3325},
+  {id:"15F-A7", floor:15, type:"住宅", in:34.4, bal:0, ter:0, price:5755},
+  {id:"15F-A8", floor:15, type:"住宅", in:34.55, bal:0, ter:0, price:5725},
+  {id:"16F-A1", floor:16, type:"住宅", in:24.96, bal:0, ter:0, price:4123},
+  {id:"16F-A2", floor:16, type:"住宅", in:34.36, bal:0.91, ter:0, price:5839},
+  {id:"16F-A3", floor:16, type:"住宅", in:31.51, bal:1.31, ter:0, price:5419},
+  {id:"16F-A4", floor:16, type:"住宅", in:28.01, bal:0, ter:0, price:4807},
+  {id:"16F-A5", floor:16, type:"住宅", in:20.03, bal:0.78, ter:0, price:3492},
+  {id:"16F-A6", floor:16, type:"住宅", in:19.21, bal:0, ter:0, price:3327},
+  {id:"16F-A7", floor:16, type:"住宅", in:34.4, bal:1.42, ter:0, price:5833},
+  {id:"16F-A8", floor:16, type:"住宅", in:34.52, bal:0.84, ter:0, price:5781},
+  {id:"17F-A1", floor:17, type:"住宅", in:24.96, bal:0.73, ter:0, price:4171},
+  {id:"17F-A2", floor:17, type:"住宅", in:34.36, bal:0, ter:0, price:5852},
+  {id:"17F-A3", floor:17, type:"住宅", in:31.41, bal:0, ter:0, price:5399},
+  {id:"17F-A4", floor:17, type:"住宅", in:25.33, bal:0.75, ter:0, price:4396},
+  {id:"17F-A5", floor:17, type:"住宅", in:18.17, bal:0, ter:0, price:3167},
+  {id:"17F-A6", floor:17, type:"住宅", in:17.34, bal:0.49, ter:0, price:3037},
+  {id:"17F-A7", floor:17, type:"住宅", in:34.4, bal:0, ter:0, price:5831},
+  {id:"17F-A8", floor:17, type:"住宅", in:34.55, bal:0, ter:0, price:5801},
+  {id:"18F-A1", floor:18, type:"住宅", in:25.49, bal:0, ter:0, price:4267},
+  {id:"18F-A2", floor:18, type:"住宅", in:34.36, bal:0.91, ter:0, price:5915},
+  {id:"18F-A3", floor:18, type:"住宅", in:34.05, bal:0.89, ter:0, price:5916},
+  {id:"18F-A4", floor:18, type:"住宅", in:25.33, bal:0, ter:0, price:4402},
+  {id:"18F-A5", floor:18, type:"住宅", in:18.17, bal:0.64, ter:0, price:3206},
+  {id:"18F-A6", floor:18, type:"住宅", in:17.34, bal:0, ter:0, price:3041},
+  {id:"18F-A7", floor:18, type:"住宅", in:34.4, bal:1.42, ter:0, price:5909},
+  {id:"18F-A8", floor:18, type:"住宅", in:34.55, bal:0.84, ter:0, price:5863},
+  {id:"19F-A1", floor:19, type:"住宅", in:24.96, bal:0.73, ter:0, price:4226},
+  {id:"19F-A2", floor:19, type:"住宅", in:31.55, bal:1.43, ter:0, price:5433},
+  {id:"19F-A3", floor:19, type:"住宅", in:34.12, bal:0, ter:0, price:5940},
+  {id:"19F-A4", floor:19, type:"住宅", in:25.33, bal:0.75, ter:0, price:4452},
+  {id:"19F-A5", floor:19, type:"住宅", in:18.17, bal:0, ter:0, price:3207},
+  {id:"19F-A6", floor:19, type:"住宅", in:17.34, bal:0.49, ter:0, price:3075},
+  {id:"19F-A7", floor:19, type:"住宅", in:34.4, bal:0, ter:0, price:5906},
+  {id:"19F-A8", floor:19, type:"住宅", in:32.94, bal:0, ter:0, price:5629},
+  {id:"20F-A1", floor:20, type:"住宅", in:24.96, bal:0, ter:0, price:4236},
+  {id:"20F-A2", floor:20, type:"住宅", in:30.21, bal:0.91, ter:0, price:5246},
+  {id:"20F-A3", floor:20, type:"住宅", in:34.17, bal:0.89, ter:0, price:6013},
+  {id:"20F-A4", floor:20, type:"住宅", in:25.33, bal:0, ter:0, price:4458},
+  {id:"20F-A5", floor:20, type:"住宅", in:18.17, bal:0.64, ter:0, price:3246},
+  {id:"20F-A6", floor:20, type:"住宅", in:17.34, bal:0, ter:0, price:3080},
+  {id:"20F-A7", floor:20, type:"住宅", in:34.4, bal:1.42, ter:0, price:5985},
+  {id:"20F-A8", floor:20, type:"住宅", in:34.3, bal:0.87, ter:0, price:5897},
+  {id:"21F-A1", floor:21, type:"住宅", in:25.49, bal:0.91, ter:0, price:4380},
+  {id:"21F-A2", floor:21, type:"住宅", in:34.36, bal:0, ter:0, price:6003},
+  {id:"21F-A3", floor:21, type:"住宅", in:34.05, bal:0, ter:0, price:6003},
+  {id:"21F-A4", floor:21, type:"住宅", in:25.33, bal:0.75, ter:0, price:4508},
+  {id:"21F-A5", floor:21, type:"住宅", in:18.17, bal:0, ter:0, price:3247},
+  {id:"21F-A6", floor:21, type:"住宅", in:17.34, bal:0.49, ter:0, price:3113},
+  {id:"21F-A7", floor:21, type:"住宅", in:34.4, bal:0, ter:0, price:5982},
+  {id:"21F-A8", floor:21, type:"住宅", in:34.41, bal:0, ter:0, price:5932},
+  {id:"22F-A1", floor:22, type:"住宅", in:25.49, bal:0, ter:0, price:4402},
+  {id:"22F-A2", floor:22, type:"住宅", in:34.36, bal:0.91, ter:0, price:6071},
+  {id:"22F-A3", floor:22, type:"住宅", in:34.05, bal:0.89, ter:0, price:6067},
+  {id:"22F-A4", floor:22, type:"住宅", in:25.33, bal:0, ter:0, price:4514},
+  {id:"22F-A5", floor:22, type:"住宅", in:18.24, bal:0.64, ter:0, price:3299},
+  {id:"22F-A6", floor:22, type:"住宅", in:18.47, bal:0, ter:0, price:3321},
+];
+/* ★★★ 資料區 0：門牌清單 ★★★（信義路四段，分弄/巷；nums 為實際門牌號）
+   30巷27弄＝單號 1~11；30巷41弄＝雙號 2~14；30巷＝單號 29~39；各號樓層見 DOOR_FLOORS
+   共 19 號 × 3 樓 = 57 門牌。若 41弄 不屬 30巷，把 base 改掉即可。 */
+// 真實 57 產權門牌（D-2）＋ 各戶共有人應分配價值 C 雜湊（附件4，FNV-1a，不露原值）
+const DOOR_GROUPS = [{"label": "30巷27弄", "doors": [{"full": "信義路四段30巷27弄11號", "short": "30巷27弄11號"}, {"full": "信義路四段30巷27弄11號-1", "short": "30巷27弄11號-1"}, {"full": "信義路四段30巷27弄11號-2", "short": "30巷27弄11號-2"}, {"full": "信義路四段30巷27弄1號", "short": "30巷27弄1號"}, {"full": "信義路四段30巷27弄1號-1", "short": "30巷27弄1號-1"}, {"full": "信義路四段30巷27弄1號-2", "short": "30巷27弄1號-2"}, {"full": "信義路四段30巷27弄3號", "short": "30巷27弄3號"}, {"full": "信義路四段30巷27弄3號-1", "short": "30巷27弄3號-1"}, {"full": "信義路四段30巷27弄3號-2", "short": "30巷27弄3號-2"}, {"full": "信義路四段30巷27弄5號", "short": "30巷27弄5號"}, {"full": "信義路四段30巷27弄5號-1", "short": "30巷27弄5號-1"}, {"full": "信義路四段30巷27弄5號-2", "short": "30巷27弄5號-2"}, {"full": "信義路四段30巷27弄7之1號", "short": "30巷27弄7之1號"}, {"full": "信義路四段30巷27弄7號", "short": "30巷27弄7號"}, {"full": "信義路四段30巷27弄7號三樓", "short": "30巷27弄7號三樓"}, {"full": "信義路四段30巷27弄9號", "short": "30巷27弄9號"}, {"full": "信義路四段30巷27弄9號-1", "short": "30巷27弄9號-1"}, {"full": "信義路四段30巷27弄9號-2", "short": "30巷27弄9號-2"}]}, {"label": "30巷41弄", "doors": [{"full": "信義路四段30巷41弄10-1號", "short": "30巷41弄10-1號"}, {"full": "信義路四段30巷41弄10-2號", "short": "30巷41弄10-2號"}, {"full": "信義路四段30巷41弄10號", "short": "30巷41弄10號"}, {"full": "信義路四段30巷41弄12-1號", "short": "30巷41弄12-1號"}, {"full": "信義路四段30巷41弄12-2號", "short": "30巷41弄12-2號"}, {"full": "信義路四段30巷41弄12號", "short": "30巷41弄12號"}, {"full": "信義路四段30巷41弄14號", "short": "30巷41弄14號"}, {"full": "信義路四段30巷41弄14號二樓", "short": "30巷41弄14號二樓"}, {"full": "信義路四段30巷41弄14號三樓", "short": "30巷41弄14號三樓"}, {"full": "信義路四段30巷41弄2號", "short": "30巷41弄2號"}, {"full": "信義路四段30巷41弄2號-1", "short": "30巷41弄2號-1"}, {"full": "信義路四段30巷41弄2號-2", "short": "30巷41弄2號-2"}, {"full": "信義路四段30巷41弄4號", "short": "30巷41弄4號"}, {"full": "信義路四段30巷41弄4號-1", "short": "30巷41弄4號-1"}, {"full": "信義路四段30巷41弄4號-2", "short": "30巷41弄4號-2"}, {"full": "信義路四段30巷41弄6號", "short": "30巷41弄6號"}, {"full": "信義路四段30巷41弄6號-1", "short": "30巷41弄6號-1"}, {"full": "信義路四段30巷41弄6號-2", "short": "30巷41弄6號-2"}, {"full": "信義路四段30巷41弄8號", "short": "30巷41弄8號"}, {"full": "信義路四段30巷41弄8號-2", "short": "30巷41弄8號-2"}, {"full": "信義路四段30巷41弄8號二樓", "short": "30巷41弄8號二樓"}]}, {"label": "30巷", "doors": [{"full": "信義路四段30巷29號", "short": "30巷29號"}, {"full": "信義路四段30巷29號-1", "short": "30巷29號-1"}, {"full": "信義路四段30巷29號-2", "short": "30巷29號-2"}, {"full": "信義路四段30巷31號", "short": "30巷31號"}, {"full": "信義路四段30巷31號-1", "short": "30巷31號-1"}, {"full": "信義路四段30巷31號-2", "short": "30巷31號-2"}, {"full": "信義路四段30巷33號", "short": "30巷33號"}, {"full": "信義路四段30巷33號-1", "short": "30巷33號-1"}, {"full": "信義路四段30巷33號-2", "short": "30巷33號-2"}, {"full": "信義路四段30巷35號", "short": "30巷35號"}, {"full": "信義路四段30巷35號-1", "short": "30巷35號-1"}, {"full": "信義路四段30巷35號-2", "short": "30巷35號-2"}, {"full": "信義路四段30巷37號", "short": "30巷37號"}, {"full": "信義路四段30巷37號-1", "short": "30巷37號-1"}, {"full": "信義路四段30巷37號-2", "short": "30巷37號-2"}, {"full": "信義路四段30巷39號", "short": "30巷39號"}, {"full": "信義路四段30巷39號-1", "short": "30巷39號-1"}, {"full": "信義路四段30巷39號-2", "short": "30巷39號-2"}]}];
+const DOOR_CH = {"信義路四段30巷27弄11號": [1674335841], "信義路四段30巷27弄11號-1": [1241655635, 1476542301], "信義路四段30巷27弄11號-2": [2860523827, 3045224731], "信義路四段30巷27弄1號": [2677190814], "信義路四段30巷27弄1號-1": [3684908722, 3922893312], "信義路四段30巷27弄1號-2": [1953523778, 2902817852, 2268633666], "信義路四段30巷27弄3號": [1880030961], "信義路四段30巷27弄3號-1": [610796584], "信義路四段30巷27弄3號-2": [3904019079], "信義路四段30巷27弄5號": [1674335841], "信義路四段30巷27弄5號-1": [2122376280], "信義路四段30巷27弄5號-2": [2942183150], "信義路四段30巷27弄7之1號": [2122376280], "信義路四段30巷27弄7號": [1674335841], "信義路四段30巷27弄7號三樓": [2942183150], "信義路四段30巷27弄9號": [1880030961], "信義路四段30巷27弄9號-1": [610796584], "信義路四段30巷27弄9號-2": [3904019079], "信義路四段30巷29號": [2716407271, 2319019860], "信義路四段30巷29號-1": [3012801272], "信義路四段30巷29號-2": [856678580], "信義路四段30巷31號": [247289981], "信義路四段30巷31號-1": [3880754141], "信義路四段30巷31號-2": [3039189427, 2022477478], "信義路四段30巷33號": [4154620579], "信義路四段30巷33號-1": [3880754141, 887967533], "信義路四段30巷33號-2": [2414498764], "信義路四段30巷35號": [4154620579], "信義路四段30巷35號-1": [1544710004, 1376933814, 2155130100], "信義路四段30巷35號-2": [2414498764], "信義路四段30巷37號": [4154620579], "信義路四段30巷37號-1": [466169016, 3863976522], "信義路四段30巷37號-2": [2414498764], "信義路四段30巷39號": [951409190], "信義路四段30巷39號-1": [4098809272, 4199474986], "信義路四段30巷39號-2": [3652459297], "信義路四段30巷41弄10-1號": [3114920934, 4018327912], "信義路四段30巷41弄10-2號": [739146224], "信義路四段30巷41弄10號": [1744971366], "信義路四段30巷41弄12-1號": [2155931518], "信義路四段30巷41弄12-2號": [2925405531], "信義路四段30巷41弄12號": [3754510334], "信義路四段30巷41弄14號": [3754510334], "信義路四段30巷41弄14號二樓": [1544710004, 1376933814, 2155130100], "信義路四段30巷41弄14號三樓": [887967533], "信義路四段30巷41弄2號": [1189861452], "信義路四段30巷41弄2號-1": [1517928156], "信義路四段30巷41弄2號-2": [634718832], "信義路四段30巷41弄4號": [1649472685, 1414586019], "信義路四段30巷41弄4號-1": [1521925851], "信義路四段30巷41弄4號-2": [916114716], "信義路四段30巷41弄6號": [227202388], "信義路四段30巷41弄6號-1": [2837889369], "信義路四段30巷41弄6號-2": [1563395332], "信義路四段30巷41弄8號": [3547009696], "信義路四段30巷41弄8號-2": [755976689], "信義路四段30巷41弄8號二樓": [3445186010]};
+/* ★★★ 資料區 2：車位清單 ★★★（資料來源：估價更後車逐台明細・中泰）
+   逐台編號 + 個別單價；共 163 台可分配（裝卸/0元不分配者已排除）
+   id=樓層-編號  floor=樓層  no=車位編號  type=車位類型  price=中泰單價(萬/個)  */
+const PARKS = [
+  {id:"B1-1", floor:"B1F", no:1, type:"大車位", price:455},
+  {id:"B1-2", floor:"B1F", no:2, type:"大車位", price:455},
+  {id:"B1-3", floor:"B1F", no:3, type:"大車位", price:445},
+  {id:"B1-4", floor:"B1F", no:4, type:"大車位", price:445},
+  {id:"B1-5", floor:"B1F", no:5, type:"大車位", price:445},
+  {id:"B1-6", floor:"B1F", no:6, type:"大車位", price:445},
+  {id:"B1-7", floor:"B1F", no:7, type:"大車位", price:445},
+  {id:"B1-8", floor:"B1F", no:8, type:"大車位", price:455},
+  {id:"B1-9", floor:"B1F", no:9, type:"大車位", price:455},
+  {id:"B1-10", floor:"B1F", no:10, type:"行動不便", price:470},
+  {id:"B1-11", floor:"B1F", no:11, type:"行動不便", price:470},
+  {id:"B1-12", floor:"B1F", no:12, type:"大車位", price:455},
+  {id:"B1-13", floor:"B1F", no:13, type:"大車位", price:445},
+  {id:"B1-14", floor:"B1F", no:14, type:"大車位", price:445},
+  {id:"B2-16", floor:"B2F", no:16, type:"大車位", price:435},
+  {id:"B2-17", floor:"B2F", no:17, type:"大車位", price:435},
+  {id:"B2-18", floor:"B2F", no:18, type:"大車位", price:425},
+  {id:"B2-19", floor:"B2F", no:19, type:"大車位", price:415},
+  {id:"B2-20", floor:"B2F", no:20, type:"大車位", price:415},
+  {id:"B2-21", floor:"B2F", no:21, type:"大車位", price:415},
+  {id:"B2-22", floor:"B2F", no:22, type:"大車位", price:415},
+  {id:"B2-23", floor:"B2F", no:23, type:"大車位", price:415},
+  {id:"B2-24", floor:"B2F", no:24, type:"大車位", price:425},
+  {id:"B2-25", floor:"B2F", no:25, type:"大車位", price:425},
+  {id:"B2-26", floor:"B2F", no:26, type:"行動不便", price:440},
+  {id:"B2-28", floor:"B2F", no:28, type:"大車位", price:425},
+  {id:"B2-29", floor:"B2F", no:29, type:"大車位", price:415},
+  {id:"B2-30", floor:"B2F", no:30, type:"大車位", price:415},
+  {id:"B2-31", floor:"B2F", no:31, type:"大車位", price:425},
+  {id:"B2-32", floor:"B2F", no:32, type:"大車位", price:425},
+  {id:"B2-33", floor:"B2F", no:33, type:"大車位", price:415},
+  {id:"B2-34", floor:"B2F", no:34, type:"大車位", price:425},
+  {id:"B2-35", floor:"B2F", no:35, type:"大車位", price:425},
+  {id:"B2-36", floor:"B2F", no:36, type:"大車位", price:425},
+  {id:"B2-37", floor:"B2F", no:37, type:"大車位", price:425},
+  {id:"B2-38", floor:"B2F", no:38, type:"大車位", price:415},
+  {id:"B2-39", floor:"B2F", no:39, type:"大車位", price:415},
+  {id:"B2-40", floor:"B2F", no:40, type:"大車位", price:415},
+  {id:"B2-41", floor:"B2F", no:41, type:"大車位", price:415},
+  {id:"B2-42", floor:"B2F", no:42, type:"大車位", price:415},
+  {id:"B2-43", floor:"B2F", no:43, type:"大車位", price:415},
+  {id:"B2-44", floor:"B2F", no:44, type:"大車位", price:425},
+  {id:"B2-45", floor:"B2F", no:45, type:"大車位", price:425},
+  {id:"B2-46", floor:"B2F", no:46, type:"大車位", price:425},
+  {id:"B2-47", floor:"B2F", no:47, type:"大車位", price:425},
+  {id:"B2-48", floor:"B2F", no:48, type:"大車位", price:415},
+  {id:"B2-49", floor:"B2F", no:49, type:"大車位", price:425},
+  {id:"B2-50", floor:"B2F", no:50, type:"大車位", price:435},
+  {id:"B2-51", floor:"B2F", no:51, type:"大車位", price:435},
+  {id:"B2-52", floor:"B2F", no:52, type:"大車位", price:415},
+  {id:"B3-53", floor:"B3F", no:53, type:"大車位", price:410},
+  {id:"B3-54", floor:"B3F", no:54, type:"大車位", price:410},
+  {id:"B3-55", floor:"B3F", no:55, type:"大車位", price:400},
+  {id:"B3-56", floor:"B3F", no:56, type:"大車位", price:390},
+  {id:"B3-57", floor:"B3F", no:57, type:"大車位", price:390},
+  {id:"B3-58", floor:"B3F", no:58, type:"大車位", price:390},
+  {id:"B3-59", floor:"B3F", no:59, type:"大車位", price:390},
+  {id:"B3-60", floor:"B3F", no:60, type:"大車位", price:390},
+  {id:"B3-61", floor:"B3F", no:61, type:"大車位", price:400},
+  {id:"B3-62", floor:"B3F", no:62, type:"大車位", price:410},
+  {id:"B3-63", floor:"B3F", no:63, type:"大車位", price:390},
+  {id:"B3-64", floor:"B3F", no:64, type:"大車位", price:400},
+  {id:"B3-65", floor:"B3F", no:65, type:"大車位", price:400},
+  {id:"B3-66", floor:"B3F", no:66, type:"大車位", price:390},
+  {id:"B3-67", floor:"B3F", no:67, type:"大車位", price:390},
+  {id:"B3-68", floor:"B3F", no:68, type:"大車位", price:400},
+  {id:"B3-69", floor:"B3F", no:69, type:"大車位", price:400},
+  {id:"B3-70", floor:"B3F", no:70, type:"大車位", price:390},
+  {id:"B3-71", floor:"B3F", no:71, type:"大車位", price:400},
+  {id:"B3-72", floor:"B3F", no:72, type:"大車位", price:400},
+  {id:"B3-73", floor:"B3F", no:73, type:"大車位", price:400},
+  {id:"B3-74", floor:"B3F", no:74, type:"大車位", price:400},
+  {id:"B3-75", floor:"B3F", no:75, type:"大車位", price:390},
+  {id:"B3-76", floor:"B3F", no:76, type:"大車位", price:390},
+  {id:"B3-77", floor:"B3F", no:77, type:"大車位", price:390},
+  {id:"B3-78", floor:"B3F", no:78, type:"大車位", price:390},
+  {id:"B3-79", floor:"B3F", no:79, type:"大車位", price:390},
+  {id:"B3-80", floor:"B3F", no:80, type:"大車位", price:390},
+  {id:"B3-81", floor:"B3F", no:81, type:"大車位", price:400},
+  {id:"B3-82", floor:"B3F", no:82, type:"大車位", price:400},
+  {id:"B3-83", floor:"B3F", no:83, type:"大車位", price:400},
+  {id:"B3-84", floor:"B3F", no:84, type:"大車位", price:400},
+  {id:"B3-85", floor:"B3F", no:85, type:"大車位", price:390},
+  {id:"B3-86", floor:"B3F", no:86, type:"大車位", price:400},
+  {id:"B3-87", floor:"B3F", no:87, type:"大車位", price:410},
+  {id:"B3-88", floor:"B3F", no:88, type:"大車位", price:410},
+  {id:"B3-89", floor:"B3F", no:89, type:"大車位", price:390},
+  {id:"B4-90", floor:"B4F", no:90, type:"大車位", price:385},
+  {id:"B4-91", floor:"B4F", no:91, type:"大車位", price:385},
+  {id:"B4-92", floor:"B4F", no:92, type:"大車位", price:375},
+  {id:"B4-93", floor:"B4F", no:93, type:"大車位", price:365},
+  {id:"B4-94", floor:"B4F", no:94, type:"大車位", price:365},
+  {id:"B4-95", floor:"B4F", no:95, type:"大車位", price:365},
+  {id:"B4-96", floor:"B4F", no:96, type:"大車位", price:365},
+  {id:"B4-97", floor:"B4F", no:97, type:"大車位", price:365},
+  {id:"B4-98", floor:"B4F", no:98, type:"大車位", price:375},
+  {id:"B4-99", floor:"B4F", no:99, type:"大車位", price:385},
+  {id:"B4-100", floor:"B4F", no:100, type:"大車位", price:365},
+  {id:"B4-101", floor:"B4F", no:101, type:"大車位", price:375},
+  {id:"B4-102", floor:"B4F", no:102, type:"大車位", price:375},
+  {id:"B4-103", floor:"B4F", no:103, type:"大車位", price:365},
+  {id:"B4-104", floor:"B4F", no:104, type:"大車位", price:365},
+  {id:"B4-105", floor:"B4F", no:105, type:"大車位", price:375},
+  {id:"B4-106", floor:"B4F", no:106, type:"大車位", price:375},
+  {id:"B4-107", floor:"B4F", no:107, type:"大車位", price:365},
+  {id:"B4-108", floor:"B4F", no:108, type:"大車位", price:375},
+  {id:"B4-109", floor:"B4F", no:109, type:"大車位", price:375},
+  {id:"B4-110", floor:"B4F", no:110, type:"大車位", price:375},
+  {id:"B4-111", floor:"B4F", no:111, type:"大車位", price:375},
+  {id:"B4-112", floor:"B4F", no:112, type:"大車位", price:365},
+  {id:"B4-113", floor:"B4F", no:113, type:"大車位", price:365},
+  {id:"B4-114", floor:"B4F", no:114, type:"大車位", price:365},
+  {id:"B4-115", floor:"B4F", no:115, type:"大車位", price:365},
+  {id:"B4-116", floor:"B4F", no:116, type:"大車位", price:365},
+  {id:"B4-117", floor:"B4F", no:117, type:"大車位", price:365},
+  {id:"B4-118", floor:"B4F", no:118, type:"大車位", price:375},
+  {id:"B4-119", floor:"B4F", no:119, type:"大車位", price:375},
+  {id:"B4-120", floor:"B4F", no:120, type:"大車位", price:375},
+  {id:"B4-121", floor:"B4F", no:121, type:"大車位", price:375},
+  {id:"B4-122", floor:"B4F", no:122, type:"大車位", price:365},
+  {id:"B4-123", floor:"B4F", no:123, type:"大車位", price:375},
+  {id:"B4-124", floor:"B4F", no:124, type:"大車位", price:385},
+  {id:"B4-125", floor:"B4F", no:125, type:"大車位", price:385},
+  {id:"B4-126", floor:"B4F", no:126, type:"大車位", price:365},
+  {id:"B5-127", floor:"B5F", no:127, type:"大車位", price:345},
+  {id:"B5-128", floor:"B5F", no:128, type:"大車位", price:345},
+  {id:"B5-129", floor:"B5F", no:129, type:"大車位", price:345},
+  {id:"B5-130", floor:"B5F", no:130, type:"大車位", price:335},
+  {id:"B5-131", floor:"B5F", no:131, type:"大車位", price:325},
+  {id:"B5-132", floor:"B5F", no:132, type:"大車位", price:325},
+  {id:"B5-133", floor:"B5F", no:133, type:"大車位", price:325},
+  {id:"B5-134", floor:"B5F", no:134, type:"大車位", price:325},
+  {id:"B5-135", floor:"B5F", no:135, type:"大車位", price:335},
+  {id:"B5-136", floor:"B5F", no:136, type:"大車位", price:335},
+  {id:"B5-137", floor:"B5F", no:137, type:"大車位", price:345},
+  {id:"B5-138", floor:"B5F", no:138, type:"大車位", price:355},
+  {id:"B5-139", floor:"B5F", no:139, type:"大車位", price:335},
+  {id:"B5-140", floor:"B5F", no:140, type:"大車位", price:345},
+  {id:"B5-141", floor:"B5F", no:141, type:"大車位", price:345},
+  {id:"B5-142", floor:"B5F", no:142, type:"大車位", price:335},
+  {id:"B5-143", floor:"B5F", no:143, type:"大車位", price:335},
+  {id:"B5-144", floor:"B5F", no:144, type:"大車位", price:345},
+  {id:"B5-145", floor:"B5F", no:145, type:"大車位", price:345},
+  {id:"B5-146", floor:"B5F", no:146, type:"大車位", price:335},
+  {id:"B5-147", floor:"B5F", no:147, type:"大車位", price:345},
+  {id:"B5-148", floor:"B5F", no:148, type:"大車位", price:345},
+  {id:"B5-149", floor:"B5F", no:149, type:"大車位", price:345},
+  {id:"B5-150", floor:"B5F", no:150, type:"大車位", price:345},
+  {id:"B5-151", floor:"B5F", no:151, type:"大車位", price:335},
+  {id:"B5-152", floor:"B5F", no:152, type:"大車位", price:335},
+  {id:"B5-153", floor:"B5F", no:153, type:"大車位", price:335},
+  {id:"B5-154", floor:"B5F", no:154, type:"大車位", price:335},
+  {id:"B5-155", floor:"B5F", no:155, type:"大車位", price:335},
+  {id:"B5-156", floor:"B5F", no:156, type:"大車位", price:335},
+  {id:"B5-157", floor:"B5F", no:157, type:"大車位", price:345},
+  {id:"B5-158", floor:"B5F", no:158, type:"大車位", price:345},
+  {id:"B5-159", floor:"B5F", no:159, type:"大車位", price:345},
+  {id:"B5-160", floor:"B5F", no:160, type:"大車位", price:345},
+  {id:"B5-161", floor:"B5F", no:161, type:"大車位", price:335},
+  {id:"B5-162", floor:"B5F", no:162, type:"大車位", price:345},
+  {id:"B5-163", floor:"B5F", no:163, type:"大車位", price:355},
+  {id:"B5-164", floor:"B5F", no:164, type:"大車位", price:355},
+  {id:"B5-165", floor:"B5F", no:165, type:"大車位", price:335},
+];
+/* ★★★ 送出後端（Google 表單）★★★：建好表單後把 action 與各欄 entry id 貼進來；留空＝示範模式 */
+const FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSfrYOdF_2Yi6nKY0vp8fHZxgWG9bjH0NRF5x6_v_PMk7h9O5Q/formResponse";
+const FORM_FIELDS = { who:"entry.14401752", tel:"entry.1205528540", value:"entry.93257094", wishes:"entry.644261484" }; // 對應 entry.xxxx；wishes 會塞成整段文字
+/* ★★★ 選屋熱度資料來源 ★★★：把本表單連結的試算表「發布到網路→CSV」的網址貼這裡
+   試算表 → 檔案 → 共用 → 發布到網路 → 整份文件 → CSV → 複製網址
+   留空＝熱度區顯示空白、全門牌列為未填 */
+const SHEET_CSV_URL = "";
+/* ========================================================= */
+
+const DETAIL = {
+  "22F-A1":{room:"二房",indoor:14.66,balcony:1.91},
+  "22F-A2":{room:"三房",indoor:20.39,balcony:1.95},
+  "22F-A3":{room:"三房",indoor:20.39,balcony:1.74},
+  "22F-A4":{room:"二房",indoor:14.9,balcony:1.57},
+  "22F-A5":{room:"一房",indoor:10.63,balcony:1.23},
+  "22F-A6":{room:"一房",indoor:10.82,balcony:1.18},
+  "21F-A1":{room:"二房",indoor:14.66,balcony:1.91},
+  "21F-A2":{room:"三房",indoor:20.39,balcony:1.95},
+  "21F-A3":{room:"三房",indoor:20.39,balcony:1.74},
+  "21F-A4":{room:"二房",indoor:14.9,balcony:1.57},
+  "21F-A5":{room:"一房",indoor:10.58,balcony:1.23},
+  "21F-A6":{room:"一房",indoor:10.09,balcony:1.18},
+  "21F-A7":{room:"三房",indoor:19.88,balcony:2.48},
+  "21F-A8":{room:"三房",indoor:19.91,balcony:2.46},
+  "20F-A1":{room:"二房",indoor:14.66,balcony:1.56},
+  "20F-A2":{room:"二房",indoor:17.69,balcony:1.95},
+  "20F-A3":{room:"三房",indoor:20.47,balcony:1.74},
+  "20F-A4":{room:"二房",indoor:14.9,balcony:1.57},
+  "20F-A5":{room:"一房",indoor:10.58,balcony:1.23},
+  "20F-A6":{room:"一房",indoor:10.09,balcony:1.18},
+  "20F-A7":{room:"三房",indoor:19.88,balcony:2.48},
+  "20F-A8":{room:"三房",indoor:19.91,balcony:2.39},
+  "19F-A1":{room:"二房",indoor:14.66,balcony:1.56},
+  "19F-A2":{room:"二房",indoor:17.69,balcony:2.82},
+  "19F-A3":{room:"三房",indoor:20.44,balcony:1.74},
+  "19F-A4":{room:"二房",indoor:14.9,balcony:1.57},
+  "19F-A5":{room:"一房",indoor:10.58,balcony:1.23},
+  "19F-A6":{room:"一房",indoor:10.09,balcony:1.18},
+  "19F-A7":{room:"三房",indoor:19.88,balcony:2.48},
+  "19F-A8":{room:"三房",indoor:19.91,balcony:1.5},
+  "18F-A1":{room:"二房",indoor:14.66,balcony:1.91},
+  "18F-A2":{room:"三房",indoor:20.39,balcony:1.95},
+  "18F-A3":{room:"三房",indoor:20.39,balcony:1.74},
+  "18F-A4":{room:"二房",indoor:14.9,balcony:1.57},
+  "18F-A5":{room:"一房",indoor:10.58,balcony:1.23},
+  "18F-A6":{room:"一房",indoor:10.09,balcony:1.18},
+  "18F-A7":{room:"三房",indoor:19.88,balcony:2.48},
+  "18F-A8":{room:"三房",indoor:19.91,balcony:2.55},
+  "17F-A1":{room:"二房",indoor:14.66,balcony:1.56},
+  "17F-A2":{room:"三房",indoor:20.39,balcony:1.95},
+  "17F-A3":{room:"二房",indoor:18.68,balcony:1.74},
+  "17F-A4":{room:"二房",indoor:14.9,balcony:1.57},
+  "17F-A5":{room:"一房",indoor:10.58,balcony:1.23},
+  "17F-A6":{room:"一房",indoor:10.09,balcony:1.18},
+  "17F-A7":{room:"三房",indoor:19.88,balcony:2.48},
+  "17F-A8":{room:"三房",indoor:19.91,balcony:2.55},
+  "16F-A1":{room:"二房",indoor:14.66,balcony:1.56},
+  "16F-A2":{room:"三房",indoor:20.39,balcony:1.95},
+  "16F-A3":{room:"二房",indoor:18.68,balcony:1.8},
+  "16F-A4":{room:"二房",indoor:16.39,balcony:1.82},
+  "16F-A5":{room:"一房",indoor:11.69,balcony:1.33},
+  "16F-A6":{room:"一房",indoor:11.21,balcony:1.27},
+  "16F-A7":{room:"三房",indoor:19.88,balcony:2.48},
+  "16F-A8":{room:"三房",indoor:19.91,balcony:2.53},
+  "15F-A1":{room:"二房",indoor:14.66,balcony:1.91},
+  "15F-A2":{room:"三房",indoor:20.39,balcony:1.95},
+  "15F-A3":{room:"三房",indoor:20.39,balcony:1.74},
+  "15F-A4":{room:"二房",indoor:16.39,balcony:1.82},
+  "15F-A5":{room:"一房",indoor:11.69,balcony:1.33},
+  "15F-A6":{room:"一房",indoor:11.21,balcony:1.27},
+  "15F-A7":{room:"三房",indoor:19.88,balcony:2.48},
+  "15F-A8":{room:"三房",indoor:19.91,balcony:2.55},
+  "14F-A1":{room:"二房",indoor:14.66,balcony:1.91},
+  "14F-A2":{room:"三房",indoor:20.39,balcony:1.95},
+  "14F-A3":{room:"三房",indoor:20.39,balcony:1.74},
+  "14F-A4":{room:"二房",indoor:16.39,balcony:1.82},
+  "14F-A5":{room:"一房",indoor:11.69,balcony:1.33},
+  "14F-A6":{room:"一房",indoor:11.21,balcony:1.27},
+  "14F-A7":{room:"三房",indoor:19.88,balcony:2.48},
+  "14F-A8":{room:"三房",indoor:19.91,balcony:2.55},
+  "13F-A1":{room:"二房",indoor:14.66,balcony:1.91},
+  "13F-A2":{room:"三房",indoor:20.39,balcony:1.95},
+  "13F-A3":{room:"三房",indoor:20.39,balcony:1.74},
+  "13F-A4":{room:"二房",indoor:16.39,balcony:1.82},
+  "13F-A5":{room:"一房",indoor:11.69,balcony:1.33},
+  "13F-A6":{room:"一房",indoor:11.21,balcony:1.27},
+  "13F-A7":{room:"三房",indoor:19.88,balcony:2.48},
+  "13F-A8":{room:"三房",indoor:19.91,balcony:2.55},
+  "12F-A1":{room:"二房",indoor:14.66,balcony:1.91},
+  "12F-A2":{room:"三房",indoor:20.39,balcony:1.95},
+  "12F-A3":{room:"三房",indoor:20.39,balcony:1.74},
+  "12F-A4":{room:"二房",indoor:16.39,balcony:1.82},
+  "12F-A5":{room:"一房",indoor:11.69,balcony:1.33},
+  "12F-A6":{room:"一房",indoor:11.21,balcony:1.27},
+  "12F-A7":{room:"三房",indoor:19.88,balcony:2.48},
+  "12F-A8":{room:"三房",indoor:19.91,balcony:2.55},
+  "11F-A1":{room:"二房",indoor:14.66,balcony:1.56},
+  "11F-A2":{room:"二房",indoor:17.74,balcony:1.89},
+  "11F-A3":{room:"三房",indoor:20.39,balcony:1.74},
+  "11F-A4":{room:"二房",indoor:16.39,balcony:1.82},
+  "11F-A5":{room:"一房",indoor:11.69,balcony:1.33},
+  "11F-A6":{room:"一房",indoor:11.21,balcony:1.27},
+  "11F-A7":{room:"三房",indoor:19.88,balcony:2.48},
+  "11F-A8":{room:"三房",indoor:19.91,balcony:2.55},
+  "10F-A1":{room:"二房",indoor:14.66,balcony:1.56},
+  "10F-A2":{room:"二房",indoor:17.74,balcony:2.83},
+  "10F-A3":{room:"三房",indoor:20.39,balcony:1.74},
+  "10F-A4":{room:"二房",indoor:16.39,balcony:1.82},
+  "10F-A5":{room:"一房",indoor:11.69,balcony:1.33},
+  "10F-A6":{room:"一房",indoor:11.21,balcony:1.27},
+  "10F-A7":{room:"三房",indoor:19.88,balcony:2.48},
+  "10F-A8":{room:"三房",indoor:19.91,balcony:1.59},
+  "9F-A1":{room:"二房",indoor:14.66,balcony:1.56},
+  "9F-A2":{room:"三房",indoor:20.39,balcony:1.95},
+  "9F-A3":{room:"二房",indoor:18.68,balcony:1.74},
+  "9F-A4":{room:"二房",indoor:16.39,balcony:1.82},
+  "9F-A5":{room:"一房",indoor:11.69,balcony:1.33},
+  "9F-A6":{room:"一房",indoor:11.21,balcony:1.27},
+  "9F-A7":{room:"三房",indoor:19.88,balcony:2.48},
+  "9F-A8":{room:"三房",indoor:19.91,balcony:2.64},
+  "8F-A1":{room:"二房",indoor:14.66,balcony:1.56},
+  "8F-A2":{room:"三房",indoor:20.39,balcony:1.95},
+  "8F-A3":{room:"二房",indoor:18.68,balcony:1.8},
+  "8F-A4":{room:"二房",indoor:16.39,balcony:1.82},
+  "8F-A5":{room:"一房",indoor:11.69,balcony:1.33},
+  "8F-A6":{room:"一房",indoor:11.21,balcony:1.27},
+  "8F-A7":{room:"三房",indoor:19.88,balcony:2.48},
+  "8F-A8":{room:"三房",indoor:19.91,balcony:2.53},
+  "7F-A1":{room:"二房",indoor:14.66,balcony:1.91},
+  "7F-A2":{room:"三房",indoor:20.39,balcony:1.95},
+  "7F-A3":{room:"三房",indoor:20.39,balcony:1.74},
+  "7F-A4":{room:"二房",indoor:16.39,balcony:1.82},
+  "7F-A5":{room:"一房",indoor:11.69,balcony:1.33},
+  "7F-A6":{room:"一房",indoor:11.21,balcony:1.27},
+  "7F-A7":{room:"三房",indoor:19.88,balcony:2.48},
+  "7F-A8":{room:"三房",indoor:19.91,balcony:2.55},
+  "6F-A1":{room:"二房",indoor:14.66,balcony:1.56},
+  "6F-A2":{room:"二房",indoor:17.69,balcony:1.87},
+  "6F-A3":{room:"三房",indoor:20.47,balcony:1.74},
+  "6F-A4":{room:"二房",indoor:16.39,balcony:1.82},
+  "6F-A5":{room:"一房",indoor:11.69,balcony:1.33},
+  "6F-A6":{room:"一房",indoor:11.21,balcony:1.27},
+  "6F-A7":{room:"三房",indoor:19.88,balcony:2.48},
+  "6F-A8":{room:"三房",indoor:19.91,balcony:2.55},
+  "5F-A1":{room:"二房",indoor:14.66,balcony:1.56},
+  "5F-A2":{room:"二房",indoor:17.69,balcony:2.81},
+  "5F-A3":{room:"三房",indoor:20.44,balcony:1.74},
+  "5F-A4":{room:"二房",indoor:16.39,balcony:1.82},
+  "5F-A5":{room:"一房",indoor:11.69,balcony:1.33},
+  "5F-A6":{room:"一房",indoor:11.21,balcony:1.27},
+  "5F-A7":{room:"三房",indoor:19.88,balcony:2.48},
+  "5F-A8":{room:"三房",indoor:19.91,balcony:1.59},
+  "4F-A1":{room:"二房",indoor:14.66,balcony:1.64},
+  "4F-A2":{room:"三房",indoor:20.39,balcony:1.95},
+  "4F-A3":{room:"二房",indoor:18.75,balcony:1.74},
+  "4F-A4":{room:"二房",indoor:16.39,balcony:1.82},
+  "4F-A5":{room:"一房",indoor:11.69,balcony:1.33},
+  "4F-A6":{room:"一房",indoor:11.21,balcony:1.27},
+  "4F-A7":{room:"三房",indoor:19.88,balcony:2.48},
+  "4F-A8":{room:"三房",indoor:19.91,balcony:2.55},
+  "3F-A1":{room:"二房",indoor:14.66,balcony:1.91},
+  "3F-A2":{room:"三房",indoor:23.21,balcony:1.91},
+  "3F-A3":{room:"二房",indoor:21.92,balcony:1.64},
+  "3F-A4":{room:"二房",indoor:16.39,balcony:1.92},
+  "3F-A5":{room:"一房",indoor:11.69,balcony:1.33},
+  "3F-A6":{room:"一房",indoor:11.21,balcony:1.27},
+  "3F-A7":{room:"三房",indoor:19.88,balcony:2.48},
+  "3F-A8":{room:"三房",indoor:19.91,balcony:3.13},
+  "2F-A1":{room:"二房",indoor:15.56,balcony:1.98},
+  "2F-A2":{room:"三房",indoor:22.96,balcony:1.91},
+  "2F-A3":{room:"三房",indoor:24.18,balcony:1.61},
+  "2F-A4":{room:"二房",indoor:17.73,balcony:2.04},
+  "2F-A5":{room:"一房",indoor:12.68,balcony:1.47},
+  "2F-A6":{room:"一房",indoor:12.21,balcony:1.41},
+  "2F-A7":{room:"三房",indoor:21.66,balcony:2.84},
+  "2F-A8":{room:"三房",indoor:19.91,balcony:3.11},
+  "1F-A1":{room:"店面",indoor:30.3,balcony:2.97},
+  "1F-A2":{room:"店面",indoor:32.26,balcony:3.25},
+  "1F-A3":{room:"店面",indoor:29.66,balcony:7.67}
+};
+UNITS.forEach(u=>{ u.area=+(u.in+u.bal+u.ter).toFixed(2);
+  const d=DETAIL[u.id]; if(d){ u.room=d.room; u.indoor=d.indoor; u.balcony=d.balcony; } });
+const byId=id=>UNITS.find(u=>u.id===id);
+const pkById=id=>PARKS.find(p=>p.id===id);
+const $=s=>document.querySelector(s);
+const fmt=n=>Math.round(n).toLocaleString('zh-Hant');
+let V=0, count=0;
+
+// 建門牌下拉（分弄/巷 optgroup）
+function doorOptions(){
+  let html='<option value="">— 請選你的門牌 —</option>';
+  DOOR_GROUPS.forEach(g=>{
+    html+=`<optgroup label="${g.label}">`;
+    g.doors.forEach(d=>{ html+=`<option value="${d.full}">${d.short}</option>`; });
+    html+='</optgroup>';
+  });
+  return html;
+}
+
+// 建戶別下拉（分樓層 optgroup）
+function unitOptions(){
+  const floors=[...new Set(UNITS.map(u=>u.floor))].sort((a,b)=>a-b);
+  let html='<option value="">— 請選戶別 —</option>';
+  floors.forEach(f=>{
+    html+=`<optgroup label="${f} 樓">`;
+    UNITS.filter(u=>u.floor===f).forEach(u=>{
+      html+=`<option value="${u.id}">${u.id}　${u.room||u.type}　${u.area.toFixed(1)}坪　約${fmt(u.price)}萬</option>`;
+    });
+    html+='</optgroup>';
+  });
+  return html;
+}
+// 車位下拉選項（163 台逐台・依估價更後車中泰；分樓層 optgroup）
+function parkOptions(){
+  const floors=[...new Set(PARKS.map(p=>p.floor))];
+  let html='<option value="">— 請選車位編號 —</option>';
+  floors.forEach(f=>{
+    html+=`<optgroup label="${f}">`;
+    PARKS.filter(p=>p.floor===f).forEach(p=>{
+      html+=`<option value="${p.id}">${f} #${p.no}　${p.type}　${fmt(p.price)}萬／個</option>`;
+    });
+    html+='</optgroup>';
+  });
+  return html;
+}
+function buildParkList(){ /* 已改用下拉，無需 datalist */ }
+
+// 在某個組合裡新增一個「戶別」列
+function addUnitRow(combo){
+  const wrap=combo.querySelector('.units');
+  const row=document.createElement('div'); row.className='subrow';
+  row.innerHTML=`<select class="selUnit">${unitOptions()}</select>
+    <button class="xbtn" type="button" title="移除這戶">✕</button>`;
+  wrap.appendChild(row);
+  row.querySelector('select').addEventListener('input',()=>{ recalcCombo(combo); validate(); });
+  row.querySelector('.xbtn').addEventListener('click',()=>{ row.remove(); recalcCombo(combo); validate(); });
+}
+
+// 在某個組合裡新增一個「車位」列（下拉選樓層/類型）
+function addParkRow(combo){
+  const wrap=combo.querySelector('.parks');
+  const row=document.createElement('div');
+  row.innerHTML=`<div class="subrow">
+      <select class="selPark">${parkOptions()}</select>
+      <button class="xbtn" type="button" title="移除車位">✕</button>
+    </div>
+    <div class="parkmsg" style="font-size:12.5px;margin:-2px 0 6px;min-height:16px"></div>`;
+  wrap.appendChild(row);
+  row.querySelector('select').addEventListener('input',()=>{ recalcCombo(combo); validate(); });
+  row.querySelector('.xbtn').addEventListener('click',()=>{ row.remove(); recalcCombo(combo); validate(); });
+}
+
+// 新增一個志願組合
+function addCombo(){
+  const div=document.createElement('div'); div.className='wish';
+  div.innerHTML=`
+    <div class="combohead">
+      <span class="rk"><span class="b">1</span>第 1 志願組合</span>
+      <button class="del" type="button" data-del>移除整組</button>
+    </div>
+    <div class="grp">想要的戶別（可多戶；很多人選 2 戶）</div>
+    <div class="units"></div>
+    <button class="miniadd" type="button" data-addunit>＋ 加一戶</button>
+    <div class="grp" style="margin-top:14px">搭配車位（選車位編號；可多個、可不填）</div>
+    <div class="parks"></div>
+    <button class="miniadd" type="button" data-addpark>＋ 加一個車位</button>
+    <div class="calc mut" style="margin-top:12px">選好戶別後，這裡會顯示整組要補/退多少。</div>`;
+  $('#combos').appendChild(div);
+  div.querySelector('[data-addunit]').addEventListener('click',()=>addUnitRow(div));
+  div.querySelector('[data-addpark]').addEventListener('click',()=>addParkRow(div));
+  div.querySelector('[data-del]').addEventListener('click',()=>{ div.remove(); renumber(); validate(); });
+  addUnitRow(div); // 預設先給 1 戶
+  renumber();
+}
+
+function renumber(){
+  [...$('#combos').children].forEach((d,i)=>{
+    d.querySelector('.rk').innerHTML=`<span class="b">${i+1}</span>第 ${i+1} 志願組合`;
+  });
+}
+
+// 計算一個組合：把所有戶別＋所有車位加總，跟應分配價值比
+function recalcCombo(combo){
+  const box=combo.querySelector('.calc');
+  const units=[...combo.querySelectorAll('.selUnit')].map(s=>s.value).filter(Boolean).map(byId);
+  let parkSum=0, parks=[];
+  [...combo.querySelectorAll('.parks > div')].forEach(row=>{
+    const inp=row.querySelector('.selPark'); const msg=row.querySelector('.parkmsg');
+    const pid=inp.value;
+    if(!pid){ msg.textContent=''; return; }
+    const p=pkById(pid);
+    if(p){ msg.style.color='var(--green)'; msg.innerHTML=`✓ ${p.floor} #${p.no}　${p.type}　車位價 <b>${fmt(p.price)} 萬／個</b>`; parkSum+=p.price; parks.push(p); }
+  });
+  if(!units.length){ box.className='calc mut'; box.textContent='選好戶別後，這裡會顯示整組要補/退多少。'; return; }
+  const unitSum=units.reduce((s,u)=>s+u.price,0);
+  const total=unitSum+parkSum;
+  const cap=V*1.1;
+  let lines=[];
+  lines.push(`本組共 <b>${units.length} 戶</b>${parks.length?` ＋ ${parks.length} 個車位`:''}`);
+
+  // 逐戶累計判斷抽籤資格：累計總價(含先計入的車位)超過110%上限者，該戶起無抽籤資格
+  let run=parkSum, overSet=false;   // 車位價先計入額度
+  units.forEach((u,i)=>{
+    run+=u.price;
+    let tag='';
+    if(V>0){
+      if(run<=cap) tag=' <span class="neg">✅ 有抽籤資格</span>';
+      else { tag=' <span class="pos">⚠ 超額・無抽籤資格</span>'; overSet=true; }
+    }
+    lines.push(`　• 第${i+1}戶 <b>${u.id}</b>　${u.type}・${u.area.toFixed(1)}坪　約 ${fmt(u.price)} 萬${tag}`);
+  });
+
+  lines.push(`房屋合計 ${fmt(unitSum)} 萬${parks.length?`　＋ 車位合計 ${fmt(parkSum)} 萬`:''}　＝　<b>總合計 ${fmt(total)} 萬</b>`);
+  if(V>0){
+    const diff=total-V;
+    lines.push(`對比應分配價值 ${fmt(V)} 萬（110%上限 ${fmt(cap)} 萬）　→　`+ (diff>=0
+      ? `<span class="pos">需補 ${fmt(diff)} 萬</span>`
+      : `<span class="neg">可退 ${fmt(-diff)} 萬</span>`));
+    if(total>cap) lines.push(`<span class="pos">⚠ 總合計已超過 110% 上限，超額的戶（如上標示）<b>不具抽籤資格</b>，需無人競爭或協議價購才能取得。</span>`);
+  }
+  box.className='calc'; box.innerHTML=lines.join('<br>');
+}
+
+function validate(){
+  const ok=[...$('#combos').children].some(c=>[...c.querySelectorAll('.selUnit')].some(s=>s.value));
+  $('#submitBtn').disabled=!(V>0 && ok);
+}
+
+function collect(){
+  return [...$('#combos').children].map((c,i)=>{
+    const uids=[...c.querySelectorAll('.selUnit')].map(s=>s.value).filter(Boolean);
+    if(!uids.length) return null;
+    const parks=[...c.querySelectorAll('.selPark')].map(s=>s.value).filter(Boolean);
+    const parkSum=parks.map(pkById).filter(Boolean).reduce((s,p)=>s+p.price,0);
+    const cap=V*1.1;
+    // 逐戶累計標記抽籤資格（車位價先計入額度）
+    let run=parkSum;
+    const uLabels=uids.map(id=>{ const u=byId(id); run+=u.price;
+      return id+(V>0?(run<=cap?'(有資格)':'(超額無資格)'):''); });
+    const total=uids.map(byId).reduce((s,u)=>s+u.price,0)+parkSum;
+    const diff=V>0? total-V : null;
+    let s=`第${i+1}志願組合：戶別[${uLabels.join('、')}]`+(parks.length?` 車位[${parks.join('、')}]`:'（不選車位）');
+    s+=`　總合計${fmt(total)}萬`+(diff!==null?(diff>=0?`（需補${fmt(diff)}萬）`:`（可退${fmt(-diff)}萬）`):'');
+    return s;
+  }).filter(Boolean);
+}
+
+// 本戶應分配價值：多共有人加總 + 附件4 C 值驗證（防亂填別戶）
+function fnv(s){let x=2166136261;for(let i=0;i<s.length;i++){x^=s.charCodeAt(i);x=Math.imul(x,16777619)>>>0;}return x>>>0;}
+function curDoorC(){ return DOOR_CH[$('#who').value]||[]; }
+function addValRow(){
+  const wrap=$('#valRows'); const row=document.createElement('div');
+  row.innerHTML=`<div class="subrow"><input type="text" class="valIn" inputmode="numeric" placeholder="例：97068579（完整數字・元）"><button class="xbtn" type="button" title="移除">✕</button></div><div class="valMsg" style="font-size:12px;margin:-2px 0 7px;min-height:15px"></div>`;
+  wrap.appendChild(row);
+  row.querySelector('.valIn').addEventListener('input',recalcVals);
+  row.querySelector('.xbtn').addEventListener('click',()=>{ row.remove(); recalcVals(); });
+}
+function recalcVals(){
+  const ok=curDoorC(); let sum=0;
+  [...$('#valRows').children].forEach(row=>{
+    const inp=row.querySelector('.valIn'), msg=row.querySelector('.valMsg');
+    const digits=(inp.value||'').replace(/[^0-9]/g,'');
+    if(!digits){ msg.textContent=''; return; }
+    if(!$('#who').value){ msg.style.color='var(--orange)'; msg.textContent='請先選上面的門牌'; return; }
+    const n=parseInt(digits,10);
+    if(ok.indexOf(fnv(String(n)))>=0){ msg.style.color='var(--green)'; msg.innerHTML=`✓ 符合本戶資料（${fmt(n/10000)} 萬）`; sum+=n; }
+    else { msg.style.color='var(--orange)'; msg.textContent='✗ 與本戶〈附件4〉應分配價值不符，請確認完整數字（元）'; }
+  });
+  V=sum/10000;
+  $('#valSum').textContent=V?fmt(V):'—';
+  $('#cap').textContent=V?fmt(V*1.1):'—';
+  [...$('#combos').children].forEach(recalcCombo);
+  validate();
+}
+$('#addVal').addEventListener('click',addValRow);
+$('#addBtn').addEventListener('click',addCombo);
+
+$('#submitBtn').addEventListener('click',()=>{
+  const lines=collect();
+  const summary=`應分配價值 ${fmt(V)} 萬\n`+lines.join('\n');
+  if(!FORM_ACTION){
+    alert('【示範模式】你的意向：\n\n'+summary+'\n\n（正式上線後，按送出會直接交到只有建設公司看得到的表單。）');
+    return;
+  }
+  const btn=$('#submitBtn'); btn.disabled=true; btn.textContent='送出中…';
+  // 背景送出：用隱藏 iframe 當 target，住戶不會跳離本頁、也看不到 Google 畫面
+  let ifr=document.getElementById('gformSink');
+  if(!ifr){ ifr=document.createElement('iframe'); ifr.id='gformSink'; ifr.name='gformSink'; ifr.style.display='none'; document.body.appendChild(ifr); }
+  const f=document.createElement('form'); f.action=FORM_ACTION; f.method='POST'; f.target='gformSink';
+  const add=(k,v)=>{ if(!k)return; const i=document.createElement('input'); i.name=k; i.value=v; f.appendChild(i); };
+  add(FORM_FIELDS.who,$('#who').value); add(FORM_FIELDS.tel,$('#tel').value);
+  add(FORM_FIELDS.value,V); add(FORM_FIELDS.wishes,lines.join(' ; '));
+  document.body.appendChild(f); f.submit(); document.body.removeChild(f);
+  setTimeout(()=>{
+    alert('已送出，感謝！住戶之間不會看到彼此的選擇。');
+    btn.textContent='✓ 已送出'; // 送出後維持鎖定，避免重複送
+  },600);
+});
+
+$('#who').innerHTML=doorOptions(); // 灌入門牌下拉
+$('#who').addEventListener('change',recalcVals);
+addValRow();
+buildParkList();                    // 車位已改 7 類下拉（no-op，保留呼叫）
+addCombo();                         // 預設先給 1 個志願組合
+validate();
+
+// ===== 各戶更新後面積與價值對照表 =====
+function renderAreaTable(){
+  const floors=[...new Set(UNITS.map(u=>u.floor))].sort((a,b)=>b-a); // 高樓→低樓
+  let h='<table class="areatbl"><thead><tr>'+
+    '<th>戶別</th><th>房型</th><th>權狀坪<br>(含公設)</th><th>室內</th><th>陽台</th><th>露台</th><th>綠化<br>陽台</th><th>更新後<br>房屋價值</th>'+
+    '</tr></thead><tbody>';
+  floors.forEach(f=>{
+    h+=`<tr class="flrow"><td colspan="8">${f} 樓</td></tr>`;
+    UNITS.filter(u=>u.floor===f).forEach(u=>{
+      const ind=u.indoor!=null?u.indoor.toFixed(2):'—';
+      const bal=u.balcony!=null?u.balcony.toFixed(2):'—';
+      h+=`<tr data-uid="${u.id}" data-room="${u.room||u.type}">`+
+         `<td class="uid">${u.id}</td><td class="rm">${u.room||u.type}</td>`+
+         `<td>${u.in.toFixed(2)}</td><td>${ind}</td><td>${bal}</td>`+
+         `<td>${u.ter?u.ter.toFixed(2):'—'}</td>`+
+         `<td>${u.bal?u.bal.toFixed(2):'—'}</td>`+
+         `<td class="val">${fmt(u.price)} 萬</td></tr>`;
+    });
+  });
+  h+='</tbody></table>';
+  $('#areaTable').innerHTML=h;
+}
+renderAreaTable();
+// 搜尋過濾（戶別或房型）
+$('#areaSearch').addEventListener('input',e=>{
+  const q=e.target.value.trim().toUpperCase();
+  document.querySelectorAll('.areatbl tbody tr').forEach(tr=>{
+    if(tr.classList.contains('flrow')){ tr.classList.remove('hide'); return; }
+    const hit=!q || (tr.dataset.uid+tr.dataset.room).toUpperCase().includes(q);
+    tr.classList.toggle('hide',!hit);
+  });
+  // 隱藏沒有可見戶的樓層標題
+  document.querySelectorAll('.areatbl .flrow').forEach(fl=>{
+    let n=fl.nextElementSibling, any=false;
+    while(n && !n.classList.contains('flrow')){ if(!n.classList.contains('hide')) any=true; n=n.nextElementSibling; }
+    fl.classList.toggle('hide',!any);
+  });
+});
+
+// ===== 選屋熱度（讀本表單的試算表 CSV）=====
+const HEAT_COLS=[...new Set(UNITS.map(u=>u.id.split('-')[1]))]; // A1..A8
+const HEAT_FLOORS=[...new Set(UNITS.map(u=>u.floor))].sort((a,b)=>b-a);
+const ALL_DOORS=DOOR_GROUPS.flatMap(g=>g.doors.map(d=>d.full));
+let HCOUNT={}, HSUB=new Set(), HTOTAL=0;
+function parseCSV(t){
+  const rows=[]; let row=[], cur='', q=false;
+  for(let i=0;i<t.length;i++){ const ch=t[i];
+    if(q){ if(ch==='"'){ if(t[i+1]==='"'){cur+='"';i++;} else q=false; } else cur+=ch; }
+    else if(ch==='"') q=true;
+    else if(ch===','){ row.push(cur); cur=''; }
+    else if(ch==='\n'||ch==='\r'){ if(ch==='\r'&&t[i+1]==='\n')i++; row.push(cur); cur=''; if(row.length>1||row[0]!=='') rows.push(row); row=[]; }
+    else cur+=ch;
+  }
+  if(cur!==''||row.length){ row.push(cur); rows.push(row); }
+  return rows;
+}
+const extractUnits=w=>[...new Set((String(w).match(/\d{1,2}F-A\d/g)||[]))];
+async function loadHeat(){
+  HCOUNT={}; HSUB=new Set(); HTOTAL=0; let err='';
+  if(SHEET_CSV_URL){
+    try{
+      const r=await fetch(SHEET_CSV_URL,{cache:'no-store'}); const rows=parseCSV(await r.text());
+      if(rows.length){
+        const head=rows[0].map(x=>x.trim());
+        let wi=head.findIndex(h=>h.includes('門牌')); let vi=head.findIndex(h=>h.includes('志願'));
+        if(wi<0) wi=1; if(vi<0) vi=head.length-1;
+        rows.slice(1).forEach(rw=>{ const who=(rw[wi]||'').trim(); if(!who) return;
+          HTOTAL++; HSUB.add(who); extractUnits(rw[vi]).forEach(id=>HCOUNT[id]=(HCOUNT[id]||0)+1); });
+      }
+    }catch(e){ err='讀取失敗，請確認試算表已「發布到網路」。'; }
+  }
+  renderHeat(err);
+}
+function hheat(c){ return !c?'z':c===1?'c':c===2?'m':'h'; }
+function renderHeat(err){
+  const bn=$('#heatBanner');
+  bn.innerHTML = !SHEET_CSV_URL ? '<div class="bn">⚙️ 尚未連結資料來源，熱度暫為空白。建設公司接上後即可即時顯示。</div>'
+    : (err?'<div class="bn">⚠️ '+err+'</div>':'');
+  const ids=UNITS.map(u=>u.id);
+  const hot=ids.filter(id=>(HCOUNT[id]||0)>=3).sort((a,b)=>(HCOUNT[b]||0)-(HCOUNT[a]||0));
+  const zero=ids.filter(id=>!HCOUNT[id]).length;
+  const maxc=ids.reduce((m,id)=>Math.max(m,HCOUNT[id]||0),0);
+  $('#heatStat').innerHTML=
+    `<div class="s"><div class="n">${HTOTAL}</div><div class="l">已填門牌</div></div>`+
+    `<div class="s"><div class="n">${hot.length}</div><div class="l">熱門戶(3+)</div></div>`+
+    `<div class="s"><div class="n">${zero}</div><div class="l">無人選戶</div></div>`+
+    `<div class="s"><div class="n">${maxc}</div><div class="l">單戶最多</div></div>`;
+  $('#heatHot').innerHTML=hot.length?`🔴 最熱門：<b>${hot.map(id=>id+'('+HCOUNT[id]+'人)').join('、')}</b>`
+    :(HTOTAL?'目前沒有 3 人以上塞車的戶別。':'');
+  let h='<table class="hgrid"><thead><tr><th></th>'+HEAT_COLS.map(c=>`<th>${c}</th>`).join('')+'</tr></thead><tbody>';
+  HEAT_FLOORS.forEach(f=>{ h+=`<tr><td class="hfl">${f}F</td>`;
+    HEAT_COLS.forEach(c=>{ const id=f+'F-'+c, u=byId(id);
+      if(!u){ h+='<td><div class="hcell empty"></div></td>'; return; }
+      const n=HCOUNT[id]||0;
+      h+=`<td><div class="hcell ${hheat(n)}" title="${id}｜${n}人想選"><span class="hid">${id}</span><span class="hct">${n>0?n+'人':'—'}</span></div></td>`;
+    }); h+='</tr>'; });
+  h+='</tbody></table>'; $('#heatGrid').innerHTML=h;
+  const pct=Math.round(HSUB.size/ALL_DOORS.length*100);
+  $('#heatProgbar').style.width=pct+'%';
+  $('#heatProgtext').innerHTML=`已填 <b>${HSUB.size}</b> / ${ALL_DOORS.length} 門牌（${pct}%）`;
+  const undone=ALL_DOORS.filter(d=>!HSUB.has(d));
+  $('#heatUndone').innerHTML=undone.length?undone.map(d=>`<span class="chip">${d.replace('信義路四段','')}</span>`).join('')
+    :'<span style="color:#1f7a3d;font-weight:700">🎉 全部門牌都已填寫！</span>';
+}
+$('#heatRefresh').addEventListener('click',loadHeat);
+loadHeat();
+</script>
+</body>
+</html>
