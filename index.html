@@ -156,7 +156,7 @@
       <div class="heatgridwrap"><div id="heatGrid"></div></div>
       <div class="prog"><i id="heatProgbar"></i></div>
       <div class="hint" id="heatProgtext" style="margin-top:0"></div>
-      <div style="font-weight:800;color:#b3261e;margin:8px 0 2px;font-size:13px">尚未填寫的門牌：</div>
+      <div id="undoneLabel" style="font-weight:800;color:#b3261e;margin:8px 0 2px;font-size:13px">尚未填寫的門牌：</div>
       <div class="undone" id="heatUndone"></div>
       <div class="hint" style="margin-top:10px">💡 <b>請一個門牌推派一位代表填寫，一戶填一次就好</b>，全家先討論好再一起填，避免重複。</div>
     </details>
@@ -563,7 +563,7 @@ const FORM_FIELDS = { who:"entry.14401752", tel:"entry.1205528540", value:"entry
 /* ★★★ 選屋熱度資料來源 ★★★：把本表單連結的試算表「發布到網路→CSV」的網址貼這裡
    試算表 → 檔案 → 共用 → 發布到網路 → 整份文件 → CSV → 複製網址
    留空＝熱度區顯示空白、全門牌列為未填 */
-const SHEET_CSV_URL = "";
+const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRzAQPdldb4qDtlbrj9OvfIeI5babaqlbpsrsiYU5UzYaUeEGueDsap8mbV3_nduEHmkQIPf8HN21Q-/pub?gid=1334709671&single=true&output=csv";
 /* ========================================================= */
 
 const DETAIL = {
@@ -1006,7 +1006,7 @@ $('#areaSearch').addEventListener('input',e=>{
 const HEAT_COLS=[...new Set(UNITS.map(u=>u.id.split('-')[1]))]; // A1..A8
 const HEAT_FLOORS=[...new Set(UNITS.map(u=>u.floor))].sort((a,b)=>b-a);
 const ALL_DOORS=DOOR_GROUPS.flatMap(g=>g.doors.map(d=>d.full));
-let HCOUNT={}, HSUB=new Set(), HTOTAL=0;
+let HCOUNT={}, HSUB=new Set(), HTOTAL=0, HANON=false;
 function parseCSV(t){
   const rows=[]; let row=[], cur='', q=false;
   for(let i=0;i<t.length;i++){ const ch=t[i];
@@ -1028,9 +1028,12 @@ async function loadHeat(){
       if(rows.length){
         const head=rows[0].map(x=>x.trim());
         let wi=head.findIndex(h=>h.includes('門牌')); let vi=head.findIndex(h=>h.includes('志願'));
-        if(wi<0) wi=1; if(vi<0) vi=head.length-1;
-        rows.slice(1).forEach(rw=>{ const who=(rw[wi]||'').trim(); if(!who) return;
-          HTOTAL++; HSUB.add(who); extractUnits(rw[vi]).forEach(id=>HCOUNT[id]=(HCOUNT[id]||0)+1); });
+        if(vi<0) vi=head.length-1;
+        HANON = wi<0;   // 無門牌欄＝匿名模式：只靠志願欄算熱度，不收集門牌（保護隱私）
+        rows.slice(1).forEach(rw=>{ const wish=rw[vi]||'';
+          if(HANON){ if(!String(wish).trim()) return; HTOTAL++; }
+          else { const who=(rw[wi]||'').trim(); if(!who) return; HTOTAL++; HSUB.add(who); }
+          extractUnits(wish).forEach(id=>HCOUNT[id]=(HCOUNT[id]||0)+1); });
       }
     }catch(e){ err='讀取失敗，請確認試算表已「發布到網路」。'; }
   }
@@ -1046,7 +1049,7 @@ function renderHeat(err){
   const zero=ids.filter(id=>!HCOUNT[id]).length;
   const maxc=ids.reduce((m,id)=>Math.max(m,HCOUNT[id]||0),0);
   $('#heatStat').innerHTML=
-    `<div class="s"><div class="n">${HTOTAL}</div><div class="l">已填門牌</div></div>`+
+    `<div class="s"><div class="n">${HTOTAL}</div><div class="l">${HANON?'已收意向':'已填門牌'}</div></div>`+
     `<div class="s"><div class="n">${hot.length}</div><div class="l">熱門戶(3+)</div></div>`+
     `<div class="s"><div class="n">${zero}</div><div class="l">無人選戶</div></div>`+
     `<div class="s"><div class="n">${maxc}</div><div class="l">單戶最多</div></div>`;
@@ -1060,12 +1063,22 @@ function renderHeat(err){
       h+=`<td><div class="hcell ${hheat(n)}" title="${id}｜${n}人想選"><span class="hid">${id}</span><span class="hct">${n>0?n+'人':'—'}</span></div></td>`;
     }); h+='</tr>'; });
   h+='</tbody></table>'; $('#heatGrid').innerHTML=h;
-  const pct=Math.round(HSUB.size/ALL_DOORS.length*100);
-  $('#heatProgbar').style.width=pct+'%';
-  $('#heatProgtext').innerHTML=`已填 <b>${HSUB.size}</b> / ${ALL_DOORS.length} 門牌（${pct}%）`;
-  const undone=ALL_DOORS.filter(d=>!HSUB.has(d));
-  $('#heatUndone').innerHTML=undone.length?undone.map(d=>`<span class="chip">${d.replace('信義路四段','')}</span>`).join('')
-    :'<span style="color:#1f7a3d;font-weight:700">🎉 全部門牌都已填寫！</span>';
+  const undoneLabel=document.getElementById('undoneLabel');
+  if(HANON){
+    const wrap=$('#heatProgbar').parentElement; if(wrap) wrap.style.display='none';
+    $('#heatProgtext').innerHTML=`目前已收到 <b>${HTOTAL}</b> 筆選屋意向（匿名統計，不顯示是哪一戶填的）`;
+    if(undoneLabel) undoneLabel.style.display='none';
+    $('#heatUndone').innerHTML='';
+  } else {
+    const wrap=$('#heatProgbar').parentElement; if(wrap) wrap.style.display='';
+    const pct=Math.round(HSUB.size/ALL_DOORS.length*100);
+    $('#heatProgbar').style.width=pct+'%';
+    $('#heatProgtext').innerHTML=`已填 <b>${HSUB.size}</b> / ${ALL_DOORS.length} 門牌（${pct}%）`;
+    if(undoneLabel) undoneLabel.style.display='';
+    const undone=ALL_DOORS.filter(d=>!HSUB.has(d));
+    $('#heatUndone').innerHTML=undone.length?undone.map(d=>`<span class="chip">${d.replace('信義路四段','')}</span>`).join('')
+      :'<span style="color:#1f7a3d;font-weight:700">🎉 全部門牌都已填寫！</span>';
+  }
 }
 $('#heatRefresh').addEventListener('click',loadHeat);
 loadHeat();
