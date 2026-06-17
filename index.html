@@ -6,49 +6,52 @@
 <title>信義364 都更權變｜我的選屋意向表（簡易版）</title>
 <style>
   :root{
-    --navy:#1b3a6b; --navy2:#2a5298; --gold:#c8a24a;
+    --navy:#1b3a6b; --navy2:#2a5298; --gold:#c8a24a; --gold2:#dcb55f;
     --green:#1f8a4c; --orange:#d97706;
-    --line:#e3e6ea; --ink:#1f2733; --sub:#5b6573; --soft:#f8f9fb;
+    --line:#e3e6ea; --ink:#1f2733; --sub:#5b6573; --soft:#f8f9fb; --warm:#eef3fb;
   }
   *{box-sizing:border-box}
   body{margin:0;font-family:"Microsoft JhengHei","微軟正黑體","PingFang TC",sans-serif;
-       color:var(--ink);background:#f5f6f8;line-height:1.6;-webkit-text-size-adjust:100%}
-  header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:22px 16px 18px}
-  header .kicker{font-size:13px;letter-spacing:2px;color:#cdd8ee;margin-bottom:4px}
-  header h1{margin:0;font-size:21px;font-weight:800}
-  header .sub{font-size:13px;color:#d7e0f2;margin-top:6px}
+       color:var(--ink);background:#f5f6f8;line-height:1.7;-webkit-text-size-adjust:100%;font-size:16.5px}
+  header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:30px 16px 26px;box-shadow:0 2px 14px rgba(20,40,80,.18);position:relative}
+  header::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:linear-gradient(90deg,var(--gold),var(--gold2))}
+  header .kicker{font-size:13px;letter-spacing:3px;color:#cdd8ee;margin-bottom:6px}
+  header h1{margin:0;font-size:24px;font-weight:800;letter-spacing:1px}
+  header .sub{font-size:14px;color:#d7e0f2;margin-top:8px;line-height:1.6}
   .wrap{max-width:680px;margin:0 auto;padding:16px}
-  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px;margin:14px 0;
-        box-shadow:0 1px 3px rgba(20,40,80,.05)}
-  .step{display:inline-flex;align-items:center;gap:8px;font-weight:800;color:var(--navy);font-size:16px;margin-bottom:12px}
-  .step .n{background:var(--navy);color:#fff;width:26px;height:26px;border-radius:50%;
-           display:inline-flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-  label.fld{display:block;font-size:13px;color:var(--sub);margin:10px 0 6px;font-weight:700}
-  input[type=text],input[type=number],select{font-family:inherit;width:100%;font-size:16px;padding:11px 12px;
-        border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+  .card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;margin:16px 0;
+        box-shadow:0 3px 16px rgba(20,40,80,.07)}
+  .step{display:inline-flex;align-items:center;gap:10px;font-weight:800;color:var(--navy);font-size:18px;margin-bottom:14px}
+  .step .n{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;width:30px;height:30px;border-radius:50%;
+           display:inline-flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;box-shadow:0 2px 6px rgba(27,58,107,.3)}
+  label.fld{display:block;font-size:14.5px;color:var(--ink);margin:14px 0 7px;font-weight:700}
+  input[type=text],input[type=number],select{font-family:inherit;width:100%;font-size:16.5px;padding:13px 14px;
+        border:1.5px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);transition:border-color .15s,box-shadow .15s}
   input[type=number]{font-weight:800;color:var(--navy)}
-  select{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1l5 5 5-5' stroke='%235b6573' stroke-width='2' fill='none'/></svg>");
+  select{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><path d='M1 1l5 5 5-5' stroke='%232a5298' stroke-width='2' fill='none'/></svg>");
         background-repeat:no-repeat;background-position:right 14px center;padding-right:34px}
-  input:focus,select:focus{outline:none;border-color:var(--navy2)}
-  .hint{font-size:12.5px;color:var(--sub);margin-top:8px}
+  input:focus,select:focus{outline:none;border-color:var(--navy2);box-shadow:0 0 0 3px rgba(42,82,152,.18)}
+  .hint{font-size:13.5px;color:var(--sub);margin-top:9px;line-height:1.65}
   .hint b{color:var(--orange)}
-  .capbox{margin-top:12px;background:#eef2f9;border-radius:10px;padding:10px 14px;font-weight:700;color:var(--navy);font-size:14px}
-  .capbox b{font-size:18px}
+  .capbox{margin-top:14px;background:linear-gradient(135deg,#eef3fb,#f5f8fc);border:1px solid #d9e3f2;border-radius:12px;padding:13px 16px;font-weight:700;color:var(--navy);font-size:15px}
+  .capbox b{font-size:19px}
   /* 志願區塊 */
-  .wish{border:1.5px solid var(--line);border-radius:12px;padding:14px;margin:12px 0;background:var(--soft)}
-  .wish .rk{display:inline-flex;align-items:center;gap:8px;font-weight:800;color:var(--navy);margin-bottom:4px}
-  .wish .rk .b{background:var(--gold);color:#fff;width:24px;height:24px;border-radius:50%;
-               display:inline-flex;align-items:center;justify-content:center;font-size:13px}
+  .wish{border:1.5px solid var(--line);border-radius:14px;padding:16px;margin:14px 0;background:linear-gradient(180deg,#fff,#f6f9fd)}
+  .wish .rk{display:inline-flex;align-items:center;gap:9px;font-weight:800;color:var(--navy);margin-bottom:6px;font-size:15px}
+  .wish .rk .b{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;width:26px;height:26px;border-radius:50%;
+               display:inline-flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 2px 5px rgba(200,162,74,.35)}
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
   @media(max-width:520px){.row2{grid-template-columns:1fr}}
-  .calc{margin-top:10px;font-size:13.5px;font-weight:700;min-height:20px}
+  .calc{margin-top:12px;font-size:14px;font-weight:700;min-height:20px}
   .calc .pos{color:var(--orange)} .calc .neg{color:var(--green)} .calc .mut{color:var(--sub);font-weight:400}
-  .addbtn{background:#fff;border:1.5px dashed var(--navy2);color:var(--navy);font-weight:800;font-size:14px;
-          padding:11px;width:100%;border-radius:10px;cursor:pointer}
-  .submit{background:var(--gold);color:#fff;border:none;font-size:17px;font-weight:800;padding:15px;
-          width:100%;border-radius:12px;margin-top:14px;cursor:pointer}
-  .submit:disabled{background:#cbb98a;cursor:not-allowed}
-  .note{font-size:12.5px;color:var(--sub);margin-top:12px;background:var(--soft);border-radius:10px;padding:11px 13px}
+  .addbtn{background:#fff;border:1.5px dashed var(--navy2);color:var(--navy);font-weight:800;font-size:14.5px;
+          padding:13px;width:100%;border-radius:12px;cursor:pointer;transition:background .15s}
+  .addbtn:hover{background:var(--warm)}
+  .submit{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;border:none;font-size:18px;font-weight:800;padding:17px;
+          width:100%;border-radius:14px;margin-top:16px;cursor:pointer;box-shadow:0 4px 14px rgba(200,162,74,.35);transition:transform .12s,box-shadow .12s;letter-spacing:1px}
+  .submit:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 18px rgba(200,162,74,.45)}
+  .submit:disabled{background:#cbb98a;cursor:not-allowed;box-shadow:none}
+  .note{font-size:13.5px;color:var(--sub);margin-top:14px;background:var(--soft);border-radius:12px;padding:13px 15px;line-height:1.65;border:1px solid #e6ecf3}
   .note b{color:var(--navy)}
   .del{background:none;border:none;color:var(--sub);font-size:12.5px;cursor:pointer;text-decoration:underline}
   .combohead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
@@ -56,13 +59,17 @@
   .subrow{display:flex;gap:8px;align-items:center;margin-bottom:8px}
   .subrow select,.subrow input{flex:1;min-width:0}
   .xbtn{background:none;border:none;color:var(--orange);font-size:20px;cursor:pointer;padding:0 4px;flex-shrink:0;line-height:1}
-  .miniadd{background:#fff;border:1.5px dashed var(--navy2);color:var(--navy);font-weight:700;font-size:13px;
-           padding:8px 12px;border-radius:8px;cursor:pointer}
-  .calc{background:#eef2f9;border-radius:10px;padding:10px 12px}
+  .miniadd{background:#fff;border:1.5px dashed var(--navy2);color:var(--navy);font-weight:700;font-size:13.5px;
+           padding:9px 13px;border-radius:10px;cursor:pointer;transition:background .15s}
+  .miniadd:hover{background:var(--warm)}
+  .calc{background:linear-gradient(135deg,#eef3fb,#f5f8fc);border-radius:12px;padding:12px 14px}
   footer{text-align:center;color:var(--sub);font-size:12px;padding:22px 16px 40px}
   /* 各戶對照表 */
-  details#areaRef summary{cursor:pointer;font-weight:800;color:var(--navy);padding:10px 12px;
-    background:#eef2f9;border-radius:10px;font-size:14px;list-style:none;user-select:none}
+  details#areaRef summary{position:relative;cursor:pointer;font-weight:800;color:var(--navy);padding:13px 50px 13px 16px;
+    background:linear-gradient(135deg,#eef3fb,#f5f8fc);border:1px solid #d9e3f2;border-left:4px solid var(--gold);border-radius:12px;font-size:14.5px;list-style:none;user-select:none;box-shadow:0 1px 5px rgba(20,40,80,.06);transition:background .15s,box-shadow .15s}
+  details#areaRef summary:hover{background:linear-gradient(135deg,#e3edf9,#eef3fb);box-shadow:0 2px 9px rgba(20,40,80,.12)}
+  details#areaRef summary::after{content:"▼";position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:11px;color:#fff;background:var(--navy2);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform .25s;box-shadow:0 1px 4px rgba(42,82,152,.4)}
+  details#areaRef[open] summary::after{transform:translateY(-50%) rotate(180deg)}
   details#areaRef summary::-webkit-details-marker{display:none}
   details#areaRef[open] summary{border-radius:10px 10px 0 0}
   .areafilter{padding:8px 0}
@@ -77,7 +84,10 @@
   .areatbl .val{font-weight:800;color:var(--green)}
   .areatbl .hide{display:none}
   /* 選屋熱度 */
-  details#heatBox summary{cursor:pointer;font-weight:800;color:var(--navy);padding:10px 12px;background:#eef2f9;border-radius:10px;font-size:14px;list-style:none;user-select:none;margin-top:4px}
+  details#heatBox summary{position:relative;cursor:pointer;font-weight:800;color:var(--navy);padding:13px 50px 13px 16px;background:linear-gradient(135deg,#eef3fb,#f5f8fc);border:1px solid #d9e3f2;border-left:4px solid var(--gold);border-radius:12px;font-size:14.5px;list-style:none;user-select:none;margin-top:4px;box-shadow:0 1px 5px rgba(20,40,80,.06);transition:background .15s,box-shadow .15s}
+  details#heatBox summary:hover{background:linear-gradient(135deg,#e3edf9,#eef3fb);box-shadow:0 2px 9px rgba(20,40,80,.12)}
+  details#heatBox summary::after{content:"▼";position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:11px;color:#fff;background:var(--navy2);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform .25s;box-shadow:0 1px 4px rgba(42,82,152,.4)}
+  details#heatBox[open] summary::after{transform:translateY(-50%) rotate(180deg)}
   details#heatBox summary::-webkit-details-marker{display:none}
   #heatBanner .bn{background:#fff7e6;border:1px solid #f0c36d;color:#8a5a00;border-radius:10px;padding:9px 11px;font-size:12.5px;margin:6px 0}
   .heatstat{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:10px 0 4px}
@@ -727,7 +737,7 @@ const DETAIL = {
   "1F-A2":{room:"店面",indoor:32.26,balcony:3.25},
   "1F-A3":{room:"店面",indoor:29.66,balcony:7.67}
 };
-UNITS.forEach(u=>{ u.area=+(u.in+u.bal+u.ter).toFixed(2);
+UNITS.forEach(u=>{ u.area=+u.in.toFixed(2); /* 權狀坪=含公設總坪(u.in)，與對照表同源；bal=綠陽、ter=露台為內含明細，不重複相加 */
   const d=DETAIL[u.id]; if(d){ u.room=d.room; u.indoor=d.indoor; u.balcony=d.balcony; } });
 const byId=id=>UNITS.find(u=>u.id===id);
 const pkById=id=>PARKS.find(p=>p.id===id);
