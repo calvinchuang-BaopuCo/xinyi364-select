@@ -763,7 +763,7 @@ function unitOptions(){
   floors.forEach(f=>{
     html+=`<optgroup label="${f} 樓">`;
     UNITS.filter(u=>u.floor===f).forEach(u=>{
-      html+=`<option value="${u.id}">${u.id}　${u.room||u.type}　${u.area.toFixed(1)}坪　約${fmt(u.price)}萬</option>`;
+      html+=`<option value="${u.id}">${u.id}　${u.room||u.type}　${u.area.toFixed(2)}坪　約${fmt(u.price)}萬</option>`;
     });
     html+='</optgroup>';
   });
@@ -866,7 +866,7 @@ function recalcCombo(combo){
       if(run<=cap) tag=' <span class="neg">✅ 有抽籤資格</span>';
       else { tag=' <span class="pos">⚠ 超額・無抽籤資格</span>'; overSet=true; }
     }
-    lines.push(`　• 第${i+1}戶 <b>${u.id}</b>　${u.type}・${u.area.toFixed(1)}坪　約 ${fmt(u.price)} 萬${tag}`);
+    lines.push(`　• 第${i+1}戶 <b>${u.id}</b>　${u.type}・${u.area.toFixed(2)}坪　約 ${fmt(u.price)} 萬${tag}`);
   });
 
   lines.push(`房屋合計 ${fmt(unitSum)} 萬${parks.length?`　＋ 車位合計 ${fmt(parkSum)} 萬`:''}　＝　<b>總合計 ${fmt(total)} 萬</b>`);
