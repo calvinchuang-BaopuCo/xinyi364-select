@@ -130,6 +130,17 @@
 
 <div class="wrap">
 
+  <!-- 填寫須知 -->
+  <div class="card" style="border-left:5px solid #C55A11;background:#FFF8EC">
+    <div style="font-weight:800;color:#C55A11;font-size:15.5px;margin-bottom:6px">⚠️ 填寫前請務必注意</div>
+    <ol style="margin:0;padding-left:22px;line-height:1.95;font-size:14.5px;color:#3a3f47">
+      <li>一定要<b>選門牌</b>並填入您的<b>更新後價值（應分配價值）</b>——這個數字在您收到的權利變換文件上，每位所有權人手上都有一張。</li>
+      <li>同一戶若有<b>多位所有權人</b>，請<b>合起來填一次就好</b>（用下方「＋加共有人」加總）。</li>
+      <li><b>電話請務必填寫</b>，後續有問題才聯繫得到您。</li>
+      <li>不會填寫嗎？請直接<b>來電聯絡：0963-029-408</b></li>
+    </ol>
+  </div>
+
   <!-- 基本資料 -->
   <div class="card">
     <div class="step"><span class="n">1</span>你的基本資料</div>
@@ -881,9 +892,9 @@ function recalcCombo(combo){
   if(V>0){
     const diff=total-V;
     lines.push(`對比應分配價值 ${fmt(V)} 萬（110%上限 ${fmt(cap)} 萬）　→　`+ (diff>=0
-      ? `<span class="pos">需補 ${fmt(diff)} 萬</span>`
+      ? (total>cap ? `<span class="pos">需補至少 ${fmt(diff)} 萬</span>` : `<span class="pos">需補 ${fmt(diff)} 萬</span>`)
       : `<span class="neg">可退 ${fmt(-diff)} 萬</span>`));
-    if(total>cap) lines.push(`<span class="pos">⚠ 總合計已超過 110% 上限，超額的戶（如上標示）<b>不具抽籤資格</b>，需無人競爭或協議價購才能取得。</span>`);
+    if(total>cap) lines.push(`<span class="pos">⚠ 總合計已超過 110% 上限：超出部分需依正式公告的「公開銷售價」現金補足，<b>實際補價將高於上方金額</b>（上方為最低參考）；超額戶（如上標示）不具抽籤資格，需無人競爭或協議價購才能取得。</span>`);
   }
   box.className='calc'; box.innerHTML=lines.join('<br>');
 }
