@@ -1053,7 +1053,7 @@ async function loadHeat(){
         rows.slice(1).forEach(rw=>{ const wish=rw[vi]||'';
           if(HANON){ if(!String(wish).trim()) return; HTOTAL++; }
           else { const who=(rw[wi]||'').trim(); if(!who) return; HTOTAL++; HSUB.add(who); }
-          extractUnits(wish).forEach(id=>HCOUNT[id]=(HCOUNT[id]||0)+1); extractParks(wish).forEach(id=>PCOUNT[id]=(PCOUNT[id]||0)+1); });
+          const fw=String(wish).split(' ; ')[0];           extractUnits(fw).forEach(id=>HCOUNT[id]=(HCOUNT[id]||0)+1); extractParks(fw).forEach(id=>PCOUNT[id]=(PCOUNT[id]||0)+1); });
       }
     }catch(e){ err='讀取失敗，請確認試算表已「發布到網路」。'; }
   }
